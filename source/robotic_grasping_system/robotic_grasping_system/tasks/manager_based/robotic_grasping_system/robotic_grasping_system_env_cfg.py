@@ -7,6 +7,7 @@ import math
 
 import isaaclab.sim as sim_utils
 from isaaclab.assets import ArticulationCfg, AssetBaseCfg
+from isaaclab.actuators import ImplicitActuatorCfg
 from isaaclab.envs import ManagerBasedRLEnvCfg
 from isaaclab.managers import EventTermCfg as EventTerm
 from isaaclab.managers import ObservationGroupCfg as ObsGroup
@@ -20,10 +21,67 @@ from isaaclab.utils import configclass
 from . import mdp
 
 ##
-# Pre-defined configs
+# defining both robot and actuator configs in the same file for simplicity
 ##
 
-from isaaclab_assets.robots.cartpole import CARTPOLE_CFG  # isort:skip
+HAND_ACTUATOR_CFG = ImplicitActuatorCfg(
+    joint_names_expr=["R_arm.*"],
+    stiffness= 17453292716032.0,
+    damping= 1745.32922,
+    # effort_limit = ,
+)
+
+ARM_ACTUATOR_CFG = ImplicitActuatorCfg(
+    joint_names_expr=["R_ff.*", "R_lf.*", "R_mf.*", "R_rf.*", "R_th.*"],
+    stiffness= 17453292716032.0,
+    damping= 1745.32922,
+    # effort_limit = ,
+)
+
+
+VEGA_UPPER_BODY_CFG = ArticulationCfg(
+    spawn=sim_utils.UsdFileCfg(
+        #TODO: Update the USD path to relative path
+        usd_path = f"/home/rainier/Downloads/dexmate_assignment/vega_upper_body-vega_1/vega_upper_body.usd",
+        activate_contact_sensors=True,
+        rigid_props=sim_utils.RigidBodyPropertiesCfg(
+            disable_gravity=False,
+            retain_accelerations=False,
+            linear_damping=0.0,
+            angular_damping=0.0,
+            max_linear_velocity=1000.0,
+            max_angular_velocity=1000.0,
+            max_depenetration_velocity=1.0,
+        ),
+        articulation_props=sim_utils.ArticulationRootPropertiesCfg(
+            enabled_self_collisions=True, solver_position_iteration_count=4, solver_velocity_iteration_count=0
+        ),
+    ),
+    init_state=ArticulationCfg.InitialStateCfg(
+        pos=(0.0, 0.0, 0.6), # 0.3
+        joint_pos={".*": 0.0},
+        # pos=(0.0, 0.0, 0.24),
+        # joint_pos={
+        #        "fl_hx": 0.0,  
+        #        "fr_hx": 0.0,  
+        #        "hl_hx": 0.0,  
+        #        "hr_hx": 0.0,  
+
+        #        "fl_hy": 0.9,  
+        #        "fr_hy": 0.9,  
+        #        "hl_hy": 0.9,   
+        #        "hr_hy": 0.9,
+
+        #        "fl_kn": -0.83,  
+        #        "fr_kn": -0.83,  
+        #        "hl_kn": -0.83,  
+        #        "hr_kn": -0.83,
+        # },
+        joint_vel={".*": 0.0},
+    ),
+    actuators={"hand": HAND_ACTUATOR_CFG, "arm" : ARM_ACTUATOR_CFG},
+    soft_joint_pos_limit_factor=0.95,
+)
 
 
 ##
@@ -42,7 +100,7 @@ class RoboticGraspingSystemSceneCfg(InteractiveSceneCfg):
     )
 
     # robot
-    robot: ArticulationCfg = CARTPOLE_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")
+    robot: ArticulationCfg = VEGA_UPPER_BODY_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")
 
     # lights
     dome_light = AssetBaseCfg(
@@ -60,7 +118,7 @@ class RoboticGraspingSystemSceneCfg(InteractiveSceneCfg):
 class ActionsCfg:
     """Action specifications for the MDP."""
 
-    joint_effort = mdp.JointEffortActionCfg(asset_name="robot", joint_names=["slider_to_cart"], scale=100.0)
+    joint_effort = mdp.JointPositionActionCfg(asset_name="robot", joint_names=[".*"], scale=1.0)
 
 
 @configclass
@@ -83,30 +141,21 @@ class ObservationsCfg:
     policy: PolicyCfg = PolicyCfg()
 
 
-@configclass
-class EventCfg:
-    """Configuration for events."""
+# @configclass
+# class EventCfg:
+#     """Configuration for events."""
 
-    # reset
-    reset_cart_position = EventTerm(
-        func=mdp.reset_joints_by_offset,
-        mode="reset",
-        params={
-            "asset_cfg": SceneEntityCfg("robot", joint_names=["slider_to_cart"]),
-            "position_range": (-1.0, 1.0),
-            "velocity_range": (-0.5, 0.5),
-        },
-    )
+#     # reset
+#     reset_cart_position = EventTerm(
+#         func=mdp.reset_joints_by_offset,
+#         mode="reset",
+#         params={
+#             "asset_cfg": SceneEntityCfg("robot", joint_names=[".*"]),
+#             "position_range": (-1.0, 1.0),
+#             "velocity_range": (-0.5, 0.5),
+#         },
+#     )
 
-    reset_pole_position = EventTerm(
-        func=mdp.reset_joints_by_offset,
-        mode="reset",
-        params={
-            "asset_cfg": SceneEntityCfg("robot", joint_names=["cart_to_pole"]),
-            "position_range": (-0.25 * math.pi, 0.25 * math.pi),
-            "velocity_range": (-0.25 * math.pi, 0.25 * math.pi),
-        },
-    )
 
 
 @configclass
@@ -117,24 +166,6 @@ class RewardsCfg:
     alive = RewTerm(func=mdp.is_alive, weight=1.0)
     # (2) Failure penalty
     terminating = RewTerm(func=mdp.is_terminated, weight=-2.0)
-    # (3) Primary task: keep pole upright
-    pole_pos = RewTerm(
-        func=mdp.joint_pos_target_l2,
-        weight=-1.0,
-        params={"asset_cfg": SceneEntityCfg("robot", joint_names=["cart_to_pole"]), "target": 0.0},
-    )
-    # (4) Shaping tasks: lower cart velocity
-    cart_vel = RewTerm(
-        func=mdp.joint_vel_l1,
-        weight=-0.01,
-        params={"asset_cfg": SceneEntityCfg("robot", joint_names=["slider_to_cart"])},
-    )
-    # (5) Shaping tasks: lower pole angular velocity
-    pole_vel = RewTerm(
-        func=mdp.joint_vel_l1,
-        weight=-0.005,
-        params={"asset_cfg": SceneEntityCfg("robot", joint_names=["cart_to_pole"])},
-    )
 
 
 @configclass
@@ -143,11 +174,6 @@ class TerminationsCfg:
 
     # (1) Time out
     time_out = DoneTerm(func=mdp.time_out, time_out=True)
-    # (2) Cart out of bounds
-    cart_out_of_bounds = DoneTerm(
-        func=mdp.joint_pos_out_of_manual_limit,
-        params={"asset_cfg": SceneEntityCfg("robot", joint_names=["slider_to_cart"]), "bounds": (-3.0, 3.0)},
-    )
 
 
 ##
@@ -162,7 +188,7 @@ class RoboticGraspingSystemEnvCfg(ManagerBasedRLEnvCfg):
     # Basic settings
     observations: ObservationsCfg = ObservationsCfg()
     actions: ActionsCfg = ActionsCfg()
-    events: EventCfg = EventCfg()
+    # events: EventCfg = EventCfg()
     # MDP settings
     rewards: RewardsCfg = RewardsCfg()
     terminations: TerminationsCfg = TerminationsCfg()
@@ -172,7 +198,7 @@ class RoboticGraspingSystemEnvCfg(ManagerBasedRLEnvCfg):
         """Post initialization."""
         # general settings
         self.decimation = 2
-        self.episode_length_s = 5
+        self.episode_length_s = 500
         # viewer settings
         self.viewer.eye = (8.0, 0.0, 5.0)
         # simulation settings

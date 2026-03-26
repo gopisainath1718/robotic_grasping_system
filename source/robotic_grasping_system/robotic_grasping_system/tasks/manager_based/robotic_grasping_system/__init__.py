@@ -13,7 +13,7 @@ from . import agents
 
 
 gym.register(
-    id="Template-Robotic-Grasping-System-v0",
+    id="Robotic-Grasping-System-v0",
     entry_point="isaaclab.envs:ManagerBasedRLEnv",
     disable_env_checker=True,
     kwargs={
