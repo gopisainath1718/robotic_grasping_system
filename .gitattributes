@@ -1,0 +1,88 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Custom for Visual Studio
+*.cs     diff=csharp
+
+# Standard to msysgit
+*.doc	 diff=astextplain
+*.DOC	 diff=astextplain
+*.docx diff=astextplain
+*.DOCX diff=astextplain
+*.dot  diff=astextplain
+*.DOT  diff=astextplain
+*.pdf  diff=astextplain
+*.PDF	 diff=astextplain
+*.rtf	 diff=astextplain
+*.RTF	 diff=astextplain
+
+# Markdown files
+*.md text
+*.MD text
+
+# Python files
+*.py text
+*.pyx text
+*.pxd text
+*.pxi text
+
+# C/C++ files
+*.c text
+*.h text
+*.cpp text
+*.hpp text
+*.cc text
+*.cxx text
+
+# Shell scripts
+*.sh text
+*.bash text
+
+# YAML files
+*.yml text
+*.yaml text
+
+# JSON files
+*.json text
+
+# TOML files
+*.toml text
+
+# RST files
+*.rst text
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.mov binary
+*.mp4 binary
+*.mp3 binary
+*.flv binary
+*.fla binary
+*.swf binary
+*.gz binary
+*.zip binary
+*.7z binary
+*.ttf binary
+*.eot binary
+*.woff binary
+*.woff2 binary
+*.pyc binary
+*.pyo binary
+*.pyd binary
+*.so binary
+*.dylib binary
+*.dll binary
+*.exe binary
+*.bin binary
+*.dat binary
+*.db binary
+*.sqlite binary
+*.sqlite3 binary
+*.usd binary
+*.usda binary
+*.usdc binary
+*.usdz binary
