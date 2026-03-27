@@ -48,12 +48,21 @@ VEGA_USD = "/home/rainier/Downloads/dexmate_assignment/vega_upper_body-vega_1/ve
 # -- Right arm + hand joint names
 RIGHT_ARM_JOINTS = [f"R_arm_j{i}" for i in range(1, 8)]  # 7 DOF
 RIGHT_HAND_JOINTS = [
-    "R_ff_j1", "R_ff_j2",   # fore finger
-    "R_mf_j1", "R_mf_j2",   # middle finger
-    "R_rf_j1", "R_rf_j2",   # ring finger
-    "R_lf_j1", "R_lf_j2",   # little finger
-    "R_th_j0", "R_th_j1", "R_th_j2",  # thumb
+    "R_ff_j1",
+    "R_mf_j1",
+    "R_rf_j1",
+    "R_lf_j1",
+    "R_th_j0", "R_th_j1",
 ]
+
+RIGHT_HAND_MIMIC_JOINTS = [
+ "R_ff_j2",   # fore finger
+ "R_mf_j2",   # middle finger
+ "R_rf_j2",   # ring finger
+ "R_lf_j2",   # little finger
+ "R_th_j2",  # thumb
+]
+
 RIGHT_JOINTS = RIGHT_ARM_JOINTS + RIGHT_HAND_JOINTS  # 18 DOF total
 
 # -- Fingertip body names
@@ -61,18 +70,25 @@ FINGERTIP_BODIES = ["R_ff_tip", "R_mf_tip", "R_rf_tip", "R_lf_tip", "R_th_tip"]
 
 
 #TODO: fine tune these values
-HAND_ACTUATOR_CFG = ImplicitActuatorCfg(
+ARM_ACTUATOR_CFG = ImplicitActuatorCfg(
     joint_names_expr=["R_arm.*"],
-    stiffness= 17.4533,
-    damping= 0.01745,
-    # effort_limit = ,
+    stiffness= 100,
+    damping= 10.86,
+    effort_limit={
+        "R_arm_j1": 150,
+        "R_arm_j2": 150,
+        "R_arm_j3": 80,
+        "R_arm_j4": 80,
+        "R_arm_j5": 40,
+        "R_arm_j6": 40,
+        "R_arm_j7": 25
+    },
 )
 
-ARM_ACTUATOR_CFG = ImplicitActuatorCfg(
-    joint_names_expr=["R_ff.*", "R_lf.*", "R_mf.*", "R_rf.*", "R_th.*"],
-    stiffness= 17.4533,
-    damping= 0.01745,
-    # effort_limit = ,
+HAND_ACTUATOR_CFG = ImplicitActuatorCfg(
+    joint_names_expr = RIGHT_HAND_JOINTS,
+    stiffness= 48.0,
+    damping= 1.0,
 )
 
 
