@@ -12,8 +12,10 @@ from isaaclab.managers import ObservationTermCfg as ObsTerm
 from isaaclab.managers import RewardTermCfg as RewTerm
 from isaaclab.managers import SceneEntityCfg
 from isaaclab.managers import TerminationTermCfg as DoneTerm
+from isaaclab.managers import CurriculumTermCfg as CurrTerm
 from isaaclab.scene import InteractiveSceneCfg
 from isaaclab.utils import configclass
+from isaaclab.sensors import ContactSensorCfg
 from isaaclab.utils.assets import ISAAC_NUCLEUS_DIR
 
 from . import mdp
@@ -150,6 +152,7 @@ class RoboticGraspingSystemSceneCfg(InteractiveSceneCfg):
                 sim_utils.UsdFileCfg(usd_path=YCB_OBJECTS["mustard_bottle"]),
             ],
             random_choice=True,
+            activate_contact_sensors=True,
         ),
         #TODO: check if we can randomize the yaw
         init_state=RigidObjectCfg.InitialStateCfg(
@@ -157,6 +160,13 @@ class RoboticGraspingSystemSceneCfg(InteractiveSceneCfg):
             rot=(0.7071068, -0.7071068, 0.0, 0.0),
         ),
     )
+
+    table_contact: ContactSensorCfg = ContactSensorCfg(
+        prim_path="{ENV_REGEX_NS}/Object",
+        update_period=0.0,
+        filter_prim_paths_expr=["{ENV_REGEX_NS}/Table"],
+    )
+
 
     robot: ArticulationCfg = VEGA_UPPER_BODY_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")
 
@@ -175,7 +185,6 @@ class ActionsCfg:
         asset_name="robot",
         joint_names=RIGHT_JOINTS,
         scale=1.0,
-        # use_default_offset=True,  #TODO: check this one
         )
 
 
@@ -196,25 +205,19 @@ class ObservationsCfg:
             func=mdp.joint_vel,
             params={"asset_cfg": SceneEntityCfg("robot", joint_names=RIGHT_JOINTS)},
             )
-        # Fingertip positions (5 * 3 = 15)
-        #TODO: check this one
+        # Fingertip positions(5 * 3 = 15)
         fingertip_pos = ObsTerm(
             func=mdp.body_pos_w,
             params={"asset_cfg": SceneEntityCfg("robot", body_names=FINGERTIP_BODIES)},
         )
         # Object state (3 + 4 = 7)
-        object_pos = ObsTerm(
-            func=mdp.object_position_in_robot_root_frame,
+        object_pose = ObsTerm(
+            func=mdp.body_pose_w,
             params={
-                "robot_cfg": SceneEntityCfg("robot"),
-                "object_cfg": SceneEntityCfg("object"),
+                "asset_cfg": SceneEntityCfg("object"),
             },
         )
-        object_quat = ObsTerm(
-            func=mdp.root_quat_w,
-            params={"asset_cfg": SceneEntityCfg("object")},
-        )
-        # Fingertip-to-object vectors (5 * 3 = 15)
+        # Fingertip-to-object(5 * 3 = 15)
         fingertip_to_object = ObsTerm(
             func=mdp.fingertip_to_object,
             params={
@@ -222,14 +225,12 @@ class ObservationsCfg:
                 "object_cfg": SceneEntityCfg("object"),
             },
         )
-
         #TODO: need to check this and implement
-        # # Object identity: bbox dims + one-hot (3 + 4 = 7)
+        # Object identity: bbox dims + one-hot (3 + 4 = 7)
         # object_encoding = ObsTerm(
         #     func=mdp.object_encoding,
         #     params={"object_cfg": SceneEntityCfg("object")},
         # )
-
 
         def __post_init__(self) -> None:
             self.enable_corruption = False
@@ -245,7 +246,7 @@ class RewardsCfg:
 
     reach = RewTerm(
         func=mdp.reach_reward,
-        weight=1.0,
+        weight=-1.0,
         params={
             "robot_cfg": SceneEntityCfg("robot", body_names=FINGERTIP_BODIES),
             "object_cfg": SceneEntityCfg("object"),
@@ -253,19 +254,25 @@ class RewardsCfg:
     )
     grasp = RewTerm(
         func=mdp.grasp_reward,
-        weight=5.0,
+        weight=-1.0,
         params={
             "robot_cfg": SceneEntityCfg("robot", body_names=FINGERTIP_BODIES),
             "object_cfg": SceneEntityCfg("object"),
-            "contact_threshold": 0.02,
         },
+    )
+    object_vel = RewTerm(
+        func=mdp.object_vel,
+        weight=-0.1,
+        params={
+            "object_cfg": SceneEntityCfg("object"),
+        },        
     )
     lift = RewTerm(
         func=mdp.lift_reward,
         weight=10.0,
         params={
-            "object_cfg": SceneEntityCfg("object"),
-            "min_lift_height": 0.08,
+            "sensor_cfg": SceneEntityCfg("table_contact"),
+            "threshold": 1.0
         },
     )
     action_rate = RewTerm(
@@ -278,17 +285,22 @@ class RewardsCfg:
         params={"asset_cfg": SceneEntityCfg("robot", joint_names=RIGHT_JOINTS)},
     )
 
-#TODO: add success condition maybe
 @configclass
 class TerminationsCfg:
     """Termination terms for the MDP."""
 
-    # (1) Time out
     time_out = DoneTerm(func=mdp.time_out, time_out=True)
-    # TODO: check this condition
-    object_dropped = DoneTerm(
-        func=mdp.object_dropped,
-        params={"asset_cfg": SceneEntityCfg("object"), "min_height": 0.0},
+    # object_dropped = DoneTerm(
+    #     func=mdp.object_dropped,
+    #     params={"asset_cfg": SceneEntityCfg("object"), "min_height": 0.0},
+    # )
+    object_lifted = DoneTerm(
+        func=mdp.object_lifted_success,
+        time_out=True,
+        params={
+            "sensor_cfg": SceneEntityCfg("table_contact"),
+            "hold_steps": 50,
+        },
     )
 
 
@@ -307,13 +319,12 @@ class EventCfg:
         },
     )
 
-    #TODO: check this one
     reset_objects = EventTerm(
         func=mdp.reset_root_state_uniform,
         mode="reset",
         params={
             "asset_cfg": SceneEntityCfg("object"),
-            "pose_range": {"x": (-0.05, 0.05), "y": (-0.05, 0.05), "z": (0.0, 0.0)},
+            "pose_range": {"x": (-0.3, 0.3), "y": (-0.3, 0.3), "z": (0.0, 0.0)},
             "velocity_range": {},
         },
     )
@@ -329,6 +340,11 @@ class EventCfg:
     # )
 
 
+# @configclass
+# class CurriculumCfg:
+
+
+
 ##
 # Environment configuration
 ##
@@ -336,26 +352,20 @@ class EventCfg:
 
 @configclass
 class RoboticGraspingSystemEnvCfg(ManagerBasedRLEnvCfg):
-    # Scene settings
-    scene: RoboticGraspingSystemSceneCfg = RoboticGraspingSystemSceneCfg(
-        num_envs=4096, env_spacing=2.0, replicate_physics=False
-    )
-    # Basic settings
+
+    scene: RoboticGraspingSystemSceneCfg = RoboticGraspingSystemSceneCfg(num_envs=4096, env_spacing=2.0, replicate_physics=False)
     observations: ObservationsCfg = ObservationsCfg()
     actions: ActionsCfg = ActionsCfg()
     events: EventCfg = EventCfg()
-    # MDP settings
     rewards: RewardsCfg = RewardsCfg()
     terminations: TerminationsCfg = TerminationsCfg()
+    # curriculum: CurriculumCfg = CurriculumCfg()
 
     # Post initialization
     def __post_init__(self) -> None:
         """Post initialization."""
-        # general settings
         self.decimation = 2
-        self.episode_length_s = 5
-        # viewer settings
+        self.episode_length_s = 10
         self.viewer.eye = (8.0, 0.0, 5.0)
-        # simulation settings
-        self.sim.dt = 1 / 100
+        self.sim.dt = 1 / 200
         self.sim.render_interval = self.decimation

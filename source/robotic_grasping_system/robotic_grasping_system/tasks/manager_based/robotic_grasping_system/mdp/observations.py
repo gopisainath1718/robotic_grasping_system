@@ -14,29 +14,17 @@ def body_pos_w(
     env: ManagerBasedRLEnv,
     asset_cfg: SceneEntityCfg,
 ) -> torch.Tensor:
-    """World-frame positions of specified bodies, flattened.
+    """Positions of specified bodies relative to the environment origin, flattened.
+
+    Mirrors isaaclab's body_pose_w but returns positions only (no quaternion).
 
     Returns: (num_envs, num_bodies * 3)
     """
     asset = env.scene[asset_cfg.name]
     body_ids, _ = asset.find_bodies(asset_cfg.body_names)
-    positions = asset.data.body_pos_w[:, body_ids, :]
-    return positions.reshape(env.num_envs, -1)
-
-
-def object_position_in_robot_root_frame(
-    env: ManagerBasedRLEnv,
-    robot_cfg: SceneEntityCfg = SceneEntityCfg("robot"),
-    object_cfg: SceneEntityCfg = SceneEntityCfg("object"),
-) -> torch.Tensor:
-    """The position of the object relative to the robot root.
-
-    Returns: (num_envs, 3)
-    """
-    robot = env.scene[robot_cfg.name]
-    obj: RigidObject = env.scene[object_cfg.name]
-
-    return obj.data.root_pos_w - robot.data.root_pos_w
+    positions_w = asset.data.body_pos_w[:, body_ids, :]          # (N, B, 3)
+    positions_env = positions_w - env.scene.env_origins.unsqueeze(1)  # (N, B, 3)
+    return positions_env.reshape(env.num_envs, -1)
 
 
 def fingertip_to_object(
@@ -57,3 +45,11 @@ def fingertip_to_object(
 
     diff = obj_pos - fingertip_pos  # (N, 5, 3)
     return diff.reshape(env.num_envs, -1)
+
+
+def object_encoding(
+    env: ManagerBasedRLEnv,
+    object_cfg: SceneEntityCfg,
+) -> torch.Tensor:
+        
+    obj: RigidObject = env.scene[object_cfg.name]

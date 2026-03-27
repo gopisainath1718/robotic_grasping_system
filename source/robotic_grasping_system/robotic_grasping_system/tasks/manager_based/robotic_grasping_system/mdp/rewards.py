@@ -28,67 +28,62 @@ def reach_reward(
     obj: RigidObject = env.scene[object_cfg.name]
 
     body_ids, _ = robot.find_bodies(robot_cfg.body_names)
-    fingertip_pos = robot.data.body_pos_w[:, body_ids, :]  # (N, 5, 3)
-    obj_pos = obj.data.root_pos_w.unsqueeze(1)  # (N, 1, 3)
+    fingertip_pos = robot.data.body_pos_w[:, body_ids, :]
+    obj_pos = obj.data.root_pos_w.unsqueeze(1)
 
-    distances = torch.norm(fingertip_pos - obj_pos, dim=-1)  # (N, 5)
+    distances = torch.norm(fingertip_pos - obj_pos, dim=-1)
     mean_dist = distances.mean(dim=-1)
 
-    return torch.exp(-10.0 * mean_dist)
+    return mean_dist
 
 
 def grasp_reward(
     env: ManagerBasedRLEnv,
     robot_cfg: SceneEntityCfg,
     object_cfg: SceneEntityCfg,
-    contact_threshold: float = 0.02,
 ) -> torch.Tensor:
-    """Reward for multi-finger proximity to object.
-
-    Combines per-finger exponential proximity with a bonus
-    when >= 3 fingers are within contact_threshold.
-
-    Returns: (num_envs,)
+    """Grasp reward for dexterous hand.
+    
+    Checks: Thumb opposes other fingers (squeeze)
     """
     robot = env.scene[robot_cfg.name]
-    obj: RigidObject = env.scene[object_cfg.name]
+    obj = env.scene[object_cfg.name]
 
-    body_ids, _ = robot.find_bodies(robot_cfg.body_names)
-    fingertip_pos = robot.data.body_pos_w[:, body_ids, :]  # (N, 5, 3)
-    obj_pos = obj.data.root_pos_w.unsqueeze(1)  # (N, 1, 3)
+    # 1. Thumb-finger opposition
+    thumb_ids, _ = robot.find_bodies(["R_th_tip"])
+    finger_ids, _ = robot.find_bodies(["R_ff_tip", "R_mf_tip", "R_rf_tip", "R_lf_tip"])
+    thumb_pos = robot.data.body_pos_w[:, thumb_ids[0], :]
+    other_pos = robot.data.body_pos_w[:, finger_ids, :].mean(dim=1)
+    thumb_finger_dist = torch.norm(thumb_pos - other_pos, dim=-1)
 
-    distances = torch.norm(fingertip_pos - obj_pos, dim=-1)  # (N, 5)
+    # 2. object mid point
+    midpoint = (thumb_pos + other_pos) / 2.0
+    obj_to_mid = torch.norm(obj.data.root_pos_w - midpoint, dim=-1)
 
-    per_finger = torch.exp(-50.0 * distances)
-    num_contacting = (distances < contact_threshold).float().sum(dim=-1)
+    reward = obj_to_mid + thumb_finger_dist
+    return reward
 
-    reward = per_finger.sum(dim=-1) / 5.0
-    multi_bonus = (num_contacting >= 3).float() * 0.5
 
-    return reward + multi_bonus
+def object_vel(
+    env: ManagerBasedRLEnv,
+    object_cfg: SceneEntityCfg,
+) -> torch.Tensor:
+    obj = env.scene[object_cfg.name]
+    return torch.norm(obj.data.root_lin_vel_w, dim=-1)
 
 
 def lift_reward(
     env: ManagerBasedRLEnv,
-    object_cfg: SceneEntityCfg,
-    min_lift_height: float = 0.08,
+    sensor_cfg: SceneEntityCfg,
+    threshold: int = 1.0
 ) -> torch.Tensor:
-    """Reward for lifting object above initial height.
-
-    Continuous reward proportional to height gained + bonus for clearing threshold.
-
-    Returns: (num_envs,)
+    """Negative reward if object is in contact with table.
+    
+    Returns: 0.0 if lifted, -1.0 if on table
     """
-    obj: RigidObject = env.scene[object_cfg.name]
-    obj_z = obj.data.root_pos_w[:, 2]  # (N,)
+    contact_sensor = env.scene[sensor_cfg.name]
+    force = contact_sensor.data.net_forces_w[:, 0, :]
+    force_mag = torch.norm(force, dim=-1)
 
-    if hasattr(env, "initial_object_z"):
-        ref_z = env.initial_object_z
-    else:
-        ref_z = 0.6
-
-    height_gained = torch.clamp(obj_z - ref_z, min=0.0)
-    continuous = torch.clamp(height_gained / min_lift_height, max=1.0)
-    bonus = (height_gained > min_lift_height).float()
-
-    return continuous + bonus
+    on_table = (force_mag > threshold).float()
+    return -on_table
