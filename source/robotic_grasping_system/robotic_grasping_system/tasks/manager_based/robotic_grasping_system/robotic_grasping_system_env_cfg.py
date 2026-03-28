@@ -292,7 +292,7 @@ class RewardsCfg:
         weight=5.0,
         params={
             "robot_cfg": SceneEntityCfg("robot"),
-            "contact_activation": 3,  # unlock once mean fingertip contacts > 3
+            "contact_activation": 3.0,  # unlock once mean fingertip contacts > 3
         })
 
     lift = RewTerm(
@@ -301,7 +301,7 @@ class RewardsCfg:
         params={
             "sensor_cfg": SceneEntityCfg("table_contact"),
             "threshold": 1.0,
-            "contact_activation": 3.5,  # unlock once mean fingertip contacts > 3.5
+            "contact_activation": 3.0,  # unlock once mean fingertip contacts > 3
         })
 
     object_lateral_vel = RewTerm(
@@ -315,7 +315,7 @@ class RewardsCfg:
         weight=1.0,
         params={
             "object_cfg": SceneEntityCfg("object"),
-            "contact_activation": 3.5,  # unlock once mean fingertip contacts > 3.5
+            "contact_activation": 3.0,  # unlock once mean fingertip contacts > 3
         })
     
     action_rate = RewTerm(func=mdp.action_rate_l2, weight=-0.001)

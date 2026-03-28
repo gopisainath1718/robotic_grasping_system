@@ -56,9 +56,13 @@ Training plots are located in [`docs/plots/`](docs/plots/). These plots are gene
 
 ## Future Work
 
-- **Fix and add approach_angle** for better pre-grasp hand orientation
+- **Fix and add approach_angle** — for better pre-grasp hand orientation
 - **Depth-based object encoding** — replace bounding box with point cloud features
 - **Curriculum learning** — automatic difficulty scaling based on success rate
+### Alternative Approaches
+
+- **Imitation Learning** — collect demonstrations and train a BC policy directly, bypassing reward engineering
+- **Offline RL on top of BC** — pretrain with behavior cloning, then finetune with offline RL (e.g., CQL, IQL) using the collected demonstrations to improve beyond the demonstrator
 
 ---
 
@@ -67,7 +71,7 @@ Training plots are located in [`docs/plots/`](docs/plots/). These plots are gene
 - [Isaac Lab Documentation](https://isaac-sim.github.io/IsaacLab/)
 - [RSL-RL](https://github.com/leggedrobotics/rsl_rl)
 - [YCB Object Dataset](https://www.ycbbenchmarks.com/)
-
-- [CrossDex: Cross-Embodiment Dexterous Grasping (ICLR 2025)](https://arxiv.org/abs/2403.09181) — reward design inspiration
-- [Dexterous Functional Grasping (CoRL 2023)](https://dexfunc.github.io/) — reward design inspiration
-- [Residual Policy Learning for Dexterous Manipulation](https://residual-offpolicy-rl.github.io/)
+- [CrossDex](https://github.com/PKU-RL/CrossDex) — reward design inspiration
+- [DexterousHands](https://github.com/PKU-MARL/DexterousHands) — dexterous manipulation reference
+- [UniDexGrasp2](https://github.com/PKU-EPIC/UniDexGrasp2) — universal dexterous grasping reference
+- [Residual Off-Policy RL](https://github.com/amazon-far/residual-offpolicy-rl) — residual policy learning reference

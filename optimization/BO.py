@@ -9,7 +9,6 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-# -- Isaac Sim launch (MUST run before every Omniverse import) ---------
 from isaaclab.app import AppLauncher
 
 parser = argparse.ArgumentParser(description="BO for arm/hand PD gains")
@@ -41,10 +40,9 @@ from isaaclab.utils import configclass
 # Parameters
 ##
 
-VEGA_USD = "/home/rainier/Downloads/dexmate_assignment/vega_upper_body-vega_1/vega_upper_body.usd"
+VEGA_USD = str(Path(__file__).resolve().parent.parent / "vega_upper_body-vega_1" / "vega_upper_body.usd")
 ARM_JOINTS = [f"R_arm_j{i}" for i in range(1, 8)]
 
-# Primary hand joints — optimised in hand mode
 HAND_JOINTS = [
     "R_ff_j1",              # [-1.0946,  0.2891]
     "R_mf_j1",              # [-1.0844,  0.2801]
@@ -54,7 +52,6 @@ HAND_JOINTS = [
     "R_th_j1",              # [-0.3468,  0.1834]
 ]
 
-# Mimic joints — not actuated directly, tracked for stability only (hand mode)
 HAND_J2_JOINTS = [
     "R_ff_j2",              # [-1.5500,  0.6396]
     "R_mf_j2",              # [-1.5380,  0.6266]
@@ -67,31 +64,24 @@ NUM_STEPS  = 1000
 NUM_TRIALS = 100
 SIM_DT     = 1.0 / 200.0
 
-# --- Mode-dependent configuration ---
+
 if MODE == "arm":
     OPT_JOINTS   = ARM_JOINTS
-    K_BOUNDS     = (20.0, 300.0)   # arm needs higher stiffness
-    D_BOUNDS     = (1.0,  50.0)    # arm needs higher damping
-    # Targets from the RL env init_state
+    K_BOUNDS     = (20.0, 300.0) 
+    D_BOUNDS     = (1.0,  50.0)   
     TARGET_RAD   = [-1.5708, 0.0, 0.0, -2.35619, 0.0, 0.0, 0.0]
-    TRACK_SECONDARY = False        # no mimic joints for arm
-else:  # hand
+    TRACK_SECONDARY = False    
+else:  
     OPT_JOINTS   = HAND_JOINTS
     K_BOUNDS     = (1.0,  50.0)
     D_BOUNDS     = (0.1,  10.0)
-    # Midpoint of each joint's range
     TARGET_RAD   = [-0.40, -0.40, -0.37, -0.37, 0.79, -0.08]
-    TRACK_SECONDARY = True         # track mimic j2 joints
+    TRACK_SECONDARY = True       
 
 RESULTS_DIR = Path(__file__).resolve().parent.parent / "bo_results"
 RESULTS_DIR.mkdir(exist_ok=True)
 LOG_PATH  = RESULTS_DIR / f"bo_log_{MODE}.jsonl"
 BEST_PATH = RESULTS_DIR / f"best_gains_{MODE}.json"
-
-
-##
-# Scene: ground plane + robot (no table, no objects)
-##
 
 
 @configclass
@@ -141,10 +131,6 @@ class GainTuningSceneCfg(InteractiveSceneCfg):
     )
 
 
-##
-# Simulation bootstrap
-##
-
 sim = SimulationContext(SimulationCfg(dt=SIM_DT))
 scene = InteractiveScene(
     GainTuningSceneCfg(num_envs=args.num_envs, env_spacing=2.5, replicate_physics=False)
@@ -160,14 +146,9 @@ if TRACK_SECONDARY:
     sec_ids, _ = robot.find_joints(HAND_J2_JOINTS)
 
 target_pos     = torch.tensor(TARGET_RAD, device=device)
-_default_root  = robot.data.default_root_state.clone()              # (N, 13)
-_default_jpos  = robot.data.default_joint_pos.clone()               # (N, J)
-_default_jvel  = torch.zeros_like(robot.data.default_joint_vel)     # (N, J)
-
-
-##
-# Helpers
-##
+_default_root  = robot.data.default_root_state.clone()       
+_default_jpos  = robot.data.default_joint_pos.clone()             
+_default_jvel  = torch.zeros_like(robot.data.default_joint_vel) 
 
 
 def _set_gains(k: float, d: float):
@@ -204,11 +185,9 @@ def evaluate(k: float, d: float) -> dict:
     _set_gains(k, d)
     _reset()
 
-    # Warm-up: let the sim settle before commanding targets
     for _ in range(20):
         _step()
 
-    # Set joint target (implicit actuator -> PhysX PD drive target)
     robot.set_joint_position_target(
         target_pos.expand(num_envs, -1), joint_ids=opt_ids)
 
@@ -233,7 +212,6 @@ def evaluate(k: float, d: float) -> dict:
         if TRACK_SECONDARY:
             vels_sec.append(vel_s.abs().mean().item())
 
-    # Steady state = last 20% of steps
     ss = int(0.8 * NUM_STEPS)
     if TRACK_SECONDARY:
         return dict(
@@ -250,18 +228,12 @@ def evaluate(k: float, d: float) -> dict:
         )
 
 
-##
-# Optuna objective
-##
-
-
 def objective(trial: optuna.Trial) -> float:
     k = trial.suggest_float("stiffness", *K_BOUNDS)
     d = trial.suggest_float("damping",   *D_BOUNDS)
 
     m = evaluate(k, d)
 
-    # Composite cost: tracking accuracy + oscillation penalty + gain regularisation
     gain_reg = 0.05 * (k / K_BOUNDS[1] + d / D_BOUNDS[1])
     if TRACK_SECONDARY:
         cost = m["ss_error"] + 0.5 * m["ss_vel_j1"] + 0.5 * m["ss_vel_j2"] + gain_reg
@@ -280,13 +252,8 @@ def objective(trial: optuna.Trial) -> float:
     return cost
 
 
-##
-# Entry point
-##
-
-
 def main():
-    LOG_PATH.write_text("")   # clear previous run
+    LOG_PATH.write_text("") 
 
     study = optuna.create_study(
         direction="minimize",
