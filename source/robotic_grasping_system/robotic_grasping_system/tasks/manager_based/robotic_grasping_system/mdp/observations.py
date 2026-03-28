@@ -1,8 +1,6 @@
 from __future__ import annotations
-
 import torch
 from typing import TYPE_CHECKING
-
 from isaaclab.assets import RigidObject
 from isaaclab.managers import SceneEntityCfg
 
@@ -16,14 +14,12 @@ def body_pos_w(
 ) -> torch.Tensor:
     """Positions of specified bodies relative to the environment origin, flattened.
 
-    Mirrors isaaclab's body_pose_w but returns positions only (no quaternion).
-
     Returns: (num_envs, num_bodies * 3)
     """
     asset = env.scene[asset_cfg.name]
     body_ids, _ = asset.find_bodies(asset_cfg.body_names)
-    positions_w = asset.data.body_pos_w[:, body_ids, :]          # (N, B, 3)
-    positions_env = positions_w - env.scene.env_origins.unsqueeze(1)  # (N, B, 3)
+    positions_w = asset.data.body_pos_w[:, body_ids, :]    
+    positions_env = positions_w - env.scene.env_origins.unsqueeze(1)
     return positions_env.reshape(env.num_envs, -1)
 
 
@@ -40,10 +36,10 @@ def fingertip_to_object(
     obj: RigidObject = env.scene[object_cfg.name]
 
     body_ids, _ = robot.find_bodies(robot_cfg.body_names)
-    fingertip_pos = robot.data.body_pos_w[:, body_ids, :]  # (N, 5, 3)
-    obj_pos = obj.data.root_pos_w.unsqueeze(1)  # (N, 1, 3)
+    fingertip_pos = robot.data.body_pos_w[:, body_ids, :]
+    obj_pos = obj.data.root_pos_w.unsqueeze(1)
 
-    diff = obj_pos - fingertip_pos  # (N, 5, 3)
+    diff = obj_pos - fingertip_pos
     return diff.reshape(env.num_envs, -1)
 
 

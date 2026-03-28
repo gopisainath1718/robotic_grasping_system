@@ -1,10 +1,6 @@
-"""Custom termination terms for Vega grasping environment."""
-
 from __future__ import annotations
-
 import torch
 from typing import TYPE_CHECKING
-
 from isaaclab.assets import RigidObject
 from isaaclab.managers import SceneEntityCfg
 
@@ -51,12 +47,10 @@ def object_lifted_success(
     if not hasattr(env, "_lift_hold_counter"):
         env._lift_hold_counter = torch.zeros(env.num_envs, device=env.device, dtype=torch.long)
 
-    # increment where no contact, reset where contact
     env._lift_hold_counter = torch.where(
         not_on_table, env._lift_hold_counter + 1, torch.zeros_like(env._lift_hold_counter)
     )
 
-    # reset counter for freshly reset envs
     env._lift_hold_counter = torch.where(
         env.episode_length_buf == 0, torch.zeros_like(env._lift_hold_counter), env._lift_hold_counter
     )

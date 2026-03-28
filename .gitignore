@@ -130,7 +130,7 @@ dmypy.json
 
 # Isaac Sim specific
 _isaac_sim/
-*.usd
+# *.usd
 *.usda
 *.usdc
 *.usdz

@@ -1,14 +1,8 @@
-"""Bayesian Optimisation of hand-joint PD gains (stiffness & damping).
-
-Spawns the Vega upper-body robot in a minimal Isaac Sim scene, commands
-fixed hand-joint targets for 1000 physics steps per trial, and uses Optuna
-(TPE sampler) to minimise a composite cost of steady-state angle error,
-residual joint velocity, and gain magnitude (prefer smallest gains that
-still track well).
+"""Bayesian Optimisation of arm or hand joint PD gains (stiffness & damping).
 
 Usage (inside the Isaac Lab environment):
-    python optimization/BO.py --headless
-    python optimization/BO.py --headless --num_envs 8
+    python optimization/BO.py --mode hand --headless
+    python optimization/BO.py --mode arm  --headless --num_envs 8
 """
 from __future__ import annotations
 
@@ -18,11 +12,14 @@ from pathlib import Path
 # -- Isaac Sim launch (MUST run before every Omniverse import) ---------
 from isaaclab.app import AppLauncher
 
-parser = argparse.ArgumentParser(description="BO for hand PD gains")
+parser = argparse.ArgumentParser(description="BO for arm/hand PD gains")
+parser.add_argument("--mode", type=str, choices=["arm", "hand"], required=True,
+                    help="which joint group to optimise: 'arm' or 'hand'")
 parser.add_argument("--num_envs", type=int, default=4,
                     help="parallel robot instances (metrics averaged across them)")
 AppLauncher.add_app_launcher_args(parser)
 args = parser.parse_args()
+MODE = args.mode
 launcher = AppLauncher(args)
 simulation_app = launcher.app
 
@@ -45,8 +42,9 @@ from isaaclab.utils import configclass
 ##
 
 VEGA_USD = "/home/rainier/Downloads/dexmate_assignment/vega_upper_body-vega_1/vega_upper_body.usd"
-ARM_JOINTS = [f"R_arm_j{i}" for i in range(1, 8)]   # kept fixed
-# Primary joints — optimised (stiffness & damping applied here)
+ARM_JOINTS = [f"R_arm_j{i}" for i in range(1, 8)]
+
+# Primary hand joints — optimised in hand mode
 HAND_JOINTS = [
     "R_ff_j1",              # [-1.0946,  0.2891]
     "R_mf_j1",              # [-1.0844,  0.2801]
@@ -56,7 +54,7 @@ HAND_JOINTS = [
     "R_th_j1",              # [-0.3468,  0.1834]
 ]
 
-# Mimic joints — not actuated directly, tracked for stability only
+# Mimic joints — not actuated directly, tracked for stability only (hand mode)
 HAND_J2_JOINTS = [
     "R_ff_j2",              # [-1.5500,  0.6396]
     "R_mf_j2",              # [-1.5380,  0.6266]
@@ -69,22 +67,26 @@ NUM_STEPS  = 1000
 NUM_TRIALS = 100
 SIM_DT     = 1.0 / 200.0
 
-K_BOUNDS = (1.0,  50.0)  # stiffness search range
-D_BOUNDS = (0.1,   10.0)   # damping   search range
-
-# Target = midpoint of each joint's range
-#   R_ff_j1: (-1.0946 + 0.2891) / 2 = -0.40
-#   R_mf_j1: (-1.0844 + 0.2801) / 2 = -0.40
-#   R_rf_j1: (-1.0154 + 0.2840) / 2 = -0.37
-#   R_lf_j1: (-1.0118 + 0.2811) / 2 = -0.37
-#   R_th_j0: (-0.0158 + 1.6050) / 2 =  0.79
-#   R_th_j1: (-0.3468 + 0.1834) / 2 = -0.08
-TARGET_RAD = [-0.40, -0.40, -0.37, -0.37, 0.79, -0.08]
+# --- Mode-dependent configuration ---
+if MODE == "arm":
+    OPT_JOINTS   = ARM_JOINTS
+    K_BOUNDS     = (20.0, 300.0)   # arm needs higher stiffness
+    D_BOUNDS     = (1.0,  50.0)    # arm needs higher damping
+    # Targets from the RL env init_state
+    TARGET_RAD   = [-1.5708, 0.0, 0.0, -2.35619, 0.0, 0.0, 0.0]
+    TRACK_SECONDARY = False        # no mimic joints for arm
+else:  # hand
+    OPT_JOINTS   = HAND_JOINTS
+    K_BOUNDS     = (1.0,  50.0)
+    D_BOUNDS     = (0.1,  10.0)
+    # Midpoint of each joint's range
+    TARGET_RAD   = [-0.40, -0.40, -0.37, -0.37, 0.79, -0.08]
+    TRACK_SECONDARY = True         # track mimic j2 joints
 
 RESULTS_DIR = Path(__file__).resolve().parent.parent / "bo_results"
 RESULTS_DIR.mkdir(exist_ok=True)
-LOG_PATH  = RESULTS_DIR / "bo_log_hand.jsonl"
-BEST_PATH = RESULTS_DIR / "best_gains_hand.json"
+LOG_PATH  = RESULTS_DIR / f"bo_log_{MODE}.jsonl"
+BEST_PATH = RESULTS_DIR / f"best_gains_{MODE}.json"
 
 
 ##
@@ -122,7 +124,7 @@ class GainTuningSceneCfg(InteractiveSceneCfg):
         actuators={
             "arm": ImplicitActuatorCfg(
                 joint_names_expr=["R_arm.*"],
-                stiffness=100.0,
+                stiffness=100.0,    # placeholder if arm mode — overridden each trial
                 damping=10.86,
                 effort_limit={
                     "R_arm_j1": 150, "R_arm_j2": 150, "R_arm_j3": 80,
@@ -132,7 +134,7 @@ class GainTuningSceneCfg(InteractiveSceneCfg):
             ),
             "hand": ImplicitActuatorCfg(
                 joint_names_expr=HAND_JOINTS,
-                stiffness=48.0,    # placeholder — overridden each trial
+                stiffness=48.0,    # placeholder if hand mode — overridden each trial
                 damping=1.0,
             ),
         },
@@ -152,11 +154,12 @@ sim.reset()
 robot         = scene["robot"]
 device        = sim.device
 num_envs      = args.num_envs
-hand_ids,  _  = robot.find_joints(HAND_JOINTS)
-hand_j2_ids, _ = robot.find_joints(HAND_J2_JOINTS)
-num_hand      = len(hand_ids)
+opt_ids,  _   = robot.find_joints(OPT_JOINTS)
+num_opt       = len(opt_ids)
+if TRACK_SECONDARY:
+    sec_ids, _ = robot.find_joints(HAND_J2_JOINTS)
 
-target_hand    = torch.tensor(TARGET_RAD, device=device)            # (6,)
+target_pos     = torch.tensor(TARGET_RAD, device=device)
 _default_root  = robot.data.default_root_state.clone()              # (N, 13)
 _default_jpos  = robot.data.default_joint_pos.clone()               # (N, J)
 _default_jvel  = torch.zeros_like(robot.data.default_joint_vel)     # (N, J)
@@ -168,11 +171,11 @@ _default_jvel  = torch.zeros_like(robot.data.default_joint_vel)     # (N, J)
 
 
 def _set_gains(k: float, d: float):
-    """Write PD gains to the PhysX joint drives for hand joints."""
+    """Write PD gains to the PhysX joint drives for the optimised joints."""
     robot.write_joint_stiffness_to_sim(
-        torch.full((num_envs, num_hand), k, device=device), joint_ids=hand_ids)
+        torch.full((num_envs, num_opt), k, device=device), joint_ids=opt_ids)
     robot.write_joint_damping_to_sim(
-        torch.full((num_envs, num_hand), d, device=device), joint_ids=hand_ids)
+        torch.full((num_envs, num_opt), d, device=device), joint_ids=opt_ids)
 
 
 def _reset():
@@ -190,7 +193,10 @@ def _step():
     scene.update(SIM_DT)
 
 
-PENALTY = dict(ss_error=10.0, ss_vel_j1=10.0, ss_vel_j2=10.0, mean_error=10.0)
+if TRACK_SECONDARY:
+    PENALTY = dict(ss_error=10.0, ss_vel_j1=10.0, ss_vel_j2=10.0, mean_error=10.0)
+else:
+    PENALTY = dict(ss_error=10.0, ss_vel=10.0, mean_error=10.0)
 
 
 def evaluate(k: float, d: float) -> dict:
@@ -202,34 +208,46 @@ def evaluate(k: float, d: float) -> dict:
     for _ in range(20):
         _step()
 
-    # Set hand target (implicit actuator -> PhysX PD drive target)
+    # Set joint target (implicit actuator -> PhysX PD drive target)
     robot.set_joint_position_target(
-        target_hand.expand(num_envs, -1), joint_ids=hand_ids)
+        target_pos.expand(num_envs, -1), joint_ids=opt_ids)
 
-    errors, vels_j1, vels_j2 = [], [], []
-    for _ in range(NUM_STEPS):
+    errors, vels = [], []
+    vels_sec = [] if TRACK_SECONDARY else None
+    for step_i in range(NUM_STEPS):
         _step()
-        pos_j1 = robot.data.joint_pos[:, hand_ids]     # (N, 6) — primary joints
-        vel_j1 = robot.data.joint_vel[:, hand_ids]     # (N, 6)
-        vel_j2 = robot.data.joint_vel[:, hand_j2_ids]  # (N, 5) — mimic joints
+        pos = robot.data.joint_pos[:, opt_ids]
+        vel = robot.data.joint_vel[:, opt_ids]
 
-        # Detect simulation explosion — return large penalty so Optuna skips this region
-        if torch.isnan(pos_j1).any() or torch.isnan(vel_j1).any() or torch.isnan(vel_j2).any():
-            print(f"  [!] NaN detected at step {_} — unstable gains, returning penalty")
+        nan_check = torch.isnan(pos).any() or torch.isnan(vel).any()
+        if TRACK_SECONDARY:
+            vel_s = robot.data.joint_vel[:, sec_ids]
+            nan_check = nan_check or torch.isnan(vel_s).any()
+
+        if nan_check:
+            print(f"  [!] NaN detected at step {step_i} — unstable gains, returning penalty")
             return PENALTY
 
-        errors.append((pos_j1 - target_hand).abs().mean().item())
-        vels_j1.append(vel_j1.abs().mean().item())
-        vels_j2.append(vel_j2.abs().mean().item())
+        errors.append((pos - target_pos).abs().mean().item())
+        vels.append(vel.abs().mean().item())
+        if TRACK_SECONDARY:
+            vels_sec.append(vel_s.abs().mean().item())
 
     # Steady state = last 20% of steps
     ss = int(0.8 * NUM_STEPS)
-    return dict(
-        ss_error   = float(np.mean(errors[ss:])),
-        ss_vel_j1  = float(np.mean(vels_j1[ss:])),
-        ss_vel_j2  = float(np.mean(vels_j2[ss:])),
-        mean_error = float(np.mean(errors)),
-    )
+    if TRACK_SECONDARY:
+        return dict(
+            ss_error   = float(np.mean(errors[ss:])),
+            ss_vel_j1  = float(np.mean(vels[ss:])),
+            ss_vel_j2  = float(np.mean(vels_sec[ss:])),
+            mean_error = float(np.mean(errors)),
+        )
+    else:
+        return dict(
+            ss_error   = float(np.mean(errors[ss:])),
+            ss_vel     = float(np.mean(vels[ss:])),
+            mean_error = float(np.mean(errors)),
+        )
 
 
 ##
@@ -243,13 +261,14 @@ def objective(trial: optuna.Trial) -> float:
 
     m = evaluate(k, d)
 
-    # Composite cost:
-    #   ss_error    — j1 tracking accuracy (primary objective)
-    #   ss_vel_j1   — j1 steady-state oscillation
-    #   ss_vel_j2   — j2 mimic joint stability (weighted equally to j1 vel)
-    #   gain_reg    — prefer smaller gains that still track well
+    # Composite cost: tracking accuracy + oscillation penalty + gain regularisation
     gain_reg = 0.05 * (k / K_BOUNDS[1] + d / D_BOUNDS[1])
-    cost = m["ss_error"] + 0.5 * m["ss_vel_j1"] + 0.5 * m["ss_vel_j2"] + gain_reg
+    if TRACK_SECONDARY:
+        cost = m["ss_error"] + 0.5 * m["ss_vel_j1"] + 0.5 * m["ss_vel_j2"] + gain_reg
+        vel_str = f"ss_vel_j1={m['ss_vel_j1']:.4f}  ss_vel_j2={m['ss_vel_j2']:.4f}"
+    else:
+        cost = m["ss_error"] + 0.5 * m["ss_vel"] + gain_reg
+        vel_str = f"ss_vel={m['ss_vel']:.4f}"
 
     record = dict(trial=trial.number, stiffness=round(k, 2),
                   damping=round(d, 2), **m, cost=round(cost, 6))
@@ -257,9 +276,7 @@ def objective(trial: optuna.Trial) -> float:
         f.write(json.dumps(record) + "\n")
 
     print(f"[{trial.number:3d}]  K={k:6.2f}  D={d:5.2f}  "
-          f"ss_err={m['ss_error']:.4f}  "
-          f"ss_vel_j1={m['ss_vel_j1']:.4f}  ss_vel_j2={m['ss_vel_j2']:.4f}  "
-          f"cost={cost:.4f}")
+          f"ss_err={m['ss_error']:.4f}  {vel_str}  cost={cost:.4f}")
     return cost
 
 
@@ -274,7 +291,7 @@ def main():
     study = optuna.create_study(
         direction="minimize",
         sampler=optuna.samplers.TPESampler(seed=42),
-        study_name="hand_gains",
+        study_name=f"{MODE}_gains",
     )
     study.optimize(objective, n_trials=NUM_TRIALS)
 

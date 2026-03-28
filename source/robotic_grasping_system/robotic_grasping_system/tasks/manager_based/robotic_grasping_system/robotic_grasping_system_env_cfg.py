@@ -1,7 +1,3 @@
-# Copyright (c) 2022-2025, The Isaac Lab Project Developers (https://github.com/isaac-sim/IsaacLab/blob/main/CONTRIBUTORS.md).
-# All rights reserved.
-#
-# SPDX-License-Identifier: BSD-3-Clause
 import isaaclab.sim as sim_utils
 from isaaclab.assets import ArticulationCfg, AssetBaseCfg, RigidObjectCfg
 from isaaclab.actuators import ImplicitActuatorCfg
@@ -17,22 +13,25 @@ from isaaclab.scene import InteractiveSceneCfg
 from isaaclab.utils import configclass
 from isaaclab.sensors import ContactSensorCfg
 
+import os as _os
+
 from . import mdp
 
 ##
 # defining both robot and actuator configs in the same file for simplicity
 ##
 
+_REPO_ROOT = _os.path.abspath(_os.path.join(_os.path.dirname(__file__), *[".."] * 6))
+
 YCB_OBJECTS = {
-    "mug": f"/home/rainier/Downloads/dexmate_assignment/ycb_physics/025_mug.usd",
-    "sugar_box": f"/home/rainier/Downloads/dexmate_assignment/ycb_physics/sugar_box.usd",
-    "tomato_soup_can": f"/home/rainier/Downloads/dexmate_assignment/ycb_physics/tomato_soup_can.usd",
-    "banana": f"/home/rainier/Downloads/dexmate_assignment/ycb_physics/011_banana.usd",
-    "mustard_bottle": f"/home/rainier/Downloads/dexmate_assignment/ycb_physics/mustard_bottle.usd",
+    "mug": _os.path.join(_REPO_ROOT, "ycb_physics", "025_mug.usd"),
+    "sugar_box": _os.path.join(_REPO_ROOT, "ycb_physics", "sugar_box.usd"),
+    "tomato_soup_can": _os.path.join(_REPO_ROOT, "ycb_physics", "tomato_soup_can.usd"),
+    "banana": _os.path.join(_REPO_ROOT, "ycb_physics", "011_banana.usd"),
+    "mustard_bottle": _os.path.join(_REPO_ROOT, "ycb_physics", "mustard_bottle.usd"),
 }
 
-#TODO: Update the USD path to relative path
-VEGA_USD = "/home/rainier/Downloads/dexmate_assignment/vega_upper_body-vega_1/vega_upper_body.usd"
+VEGA_USD = _os.path.join(_REPO_ROOT, "vega_upper_body-vega_1", "vega_upper_body.usd")
 
 
 RIGHT_ARM_JOINTS = [f"R_arm_j{i}" for i in range(1, 8)]
@@ -46,7 +45,7 @@ RIGHT_HAND_JOINTS = [
 
 RIGHT_JOINTS = RIGHT_ARM_JOINTS + RIGHT_HAND_JOINTS
 
-FINGERTIP_BODIES = ["R_ff_tip", "R_mf_tip", "R_rf_tip", "R_lf_tip", "R_th_tip"]
+FINGERTIP_BODIES = ["R_ff_l1", "R_mf_l1", "R_rf_l1", "R_lf_l1", "R_th_l1"]
 
 ARM_ACTUATOR_CFG = ImplicitActuatorCfg(
     joint_names_expr=["R_arm.*"],
@@ -100,7 +99,7 @@ VEGA_UPPER_BODY_CFG = ArticulationCfg(
     init_state=ArticulationCfg.InitialStateCfg(
         pos=(0.0, 0.0, 0.5),
         joint_pos = {
-            "R_arm_j1": -2.35619,   # -135 deg
+            "R_arm_j1": -1.5708,   # -90 deg
             "R_arm_j2": 0.0,
             "R_arm_j3": 0.0,
             "R_arm_j4": -2.35619,   # -135 deg
@@ -158,11 +157,11 @@ class RoboticGraspingSystemSceneCfg(InteractiveSceneCfg):
             ),
             collision_props=sim_utils.CollisionPropertiesCfg(),
             visual_material=sim_utils.PreviewSurfaceCfg(
-                diffuse_color=(0.4, 0.3, 0.2),
+                diffuse_color=(0., 0.3, 0.2),
             ),
         ),
         init_state=RigidObjectCfg.InitialStateCfg(
-            pos=(0.5, 0.0, 0.25),
+            pos=(0.6, 0.0, 0.25),
         ),
     )
 
@@ -180,7 +179,7 @@ class RoboticGraspingSystemSceneCfg(InteractiveSceneCfg):
             activate_contact_sensors=True,
         ),
         init_state=RigidObjectCfg.InitialStateCfg(
-            pos=(0.5, 0.0, 0.55),
+            pos=(0.6, 0.0, 0.55),
             rot=(0.7071068, -0.7071068, 0.0, 0.0),
         ),
     )
@@ -192,27 +191,27 @@ class RoboticGraspingSystemSceneCfg(InteractiveSceneCfg):
     )
 
     ff_contact: ContactSensorCfg = ContactSensorCfg(
-        prim_path="{ENV_REGEX_NS}/Robot/R_ff_tip",
+        prim_path="{ENV_REGEX_NS}/Robot/R_ff_l2",
         update_period=0.0,
         filter_prim_paths_expr=["{ENV_REGEX_NS}/Object"],
     )
     mf_contact: ContactSensorCfg = ContactSensorCfg(
-        prim_path="{ENV_REGEX_NS}/Robot/R_mf_tip",
+        prim_path="{ENV_REGEX_NS}/Robot/R_lf_l2",
         update_period=0.0,
         filter_prim_paths_expr=["{ENV_REGEX_NS}/Object"],
     )
     rf_contact: ContactSensorCfg = ContactSensorCfg(
-        prim_path="{ENV_REGEX_NS}/Robot/R_rf_tip",
+        prim_path="{ENV_REGEX_NS}/Robot/R_mf_l2",
         update_period=0.0,
         filter_prim_paths_expr=["{ENV_REGEX_NS}/Object"],
     )
     lf_contact: ContactSensorCfg = ContactSensorCfg(
-        prim_path="{ENV_REGEX_NS}/Robot/R_lf_tip",
+        prim_path="{ENV_REGEX_NS}/Robot/R_rf_l2",
         update_period=0.0,
         filter_prim_paths_expr=["{ENV_REGEX_NS}/Object"],
     )
     th_contact: ContactSensorCfg = ContactSensorCfg(
-        prim_path="{ENV_REGEX_NS}/Robot/R_th_tip",
+        prim_path="{ENV_REGEX_NS}/Robot/R_th_l2",
         update_period=0.0,
         filter_prim_paths_expr=["{ENV_REGEX_NS}/Object"],
     )
@@ -247,10 +246,6 @@ class ObservationsCfg:
             func=mdp.joint_vel,
             params={"asset_cfg": SceneEntityCfg("robot", joint_names=RIGHT_JOINTS)})
         
-        fingertip_pos = ObsTerm(
-            func=mdp.body_pos_w,
-            params={"asset_cfg": SceneEntityCfg("robot", body_names=FINGERTIP_BODIES)})
-        
         object_pose = ObsTerm(
             func=mdp.body_pose_w,
             params={"asset_cfg": SceneEntityCfg("object")})
@@ -258,12 +253,13 @@ class ObservationsCfg:
         #TODO: change this from geometry to depth points
         object_bbox = ObsTerm(func=mdp.object_bbox_dims)
 
-        fingertip_to_object = ObsTerm(
-            func=mdp.fingertip_to_object,
+        fingertip_poses = ObsTerm(
+            func=mdp.body_pos_w,
             params={
-                "robot_cfg": SceneEntityCfg("robot", body_names=FINGERTIP_BODIES),
-                "object_cfg": SceneEntityCfg("object")})
-
+                "asset_cfg": SceneEntityCfg("robot", body_names=FINGERTIP_BODIES)})
+        
+        last_actions = ObsTerm(func=mdp.last_action)
+        
         def __post_init__(self) -> None:
             self.enable_corruption = False
             self.concatenate_terms = True
@@ -277,33 +273,11 @@ class RewardsCfg:
 
     reach = RewTerm(
         func=mdp.reach_reward,
-        weight=-1.0,
+        weight=-2.0,
         params={
-            "robot_cfg": SceneEntityCfg("robot", body_names=["R_hand_base"]),
+            "robot_cfg": SceneEntityCfg("robot", body_names=FINGERTIP_BODIES),
             "object_cfg": SceneEntityCfg("object"),
         })
-
-    # TODO: Bug for alignment
-    # approach_angle = RewTerm(
-    #     func=mdp.approach_angle_reward,
-    #     weight=0.1,
-    #     params={
-    #         "robot_cfg": SceneEntityCfg("robot", body_names=["R_hand_base"]),
-    #         "object_cfg": SceneEntityCfg("object"),
-    #         "blend_distance": 0.15,  # must match reach
-    #         "blend_sharpness": 25.0, # must match reach
-    #     })
-    
-    # grasp = RewTerm(
-    #     func=mdp.grasp_reward,
-    #     weight=2.0,
-    #     params={
-    #         "robot_cfg": SceneEntityCfg("robot", body_names=FINGERTIP_BODIES),
-    #         "object_cfg": SceneEntityCfg("object"),
-    #         "centering_scale": 0.05,   # [m] perp dist at which centering → 0
-    #         "blend_distance":  0.15,   # must match reach / approach_angle
-    #         "blend_sharpness": 25.0,
-    #     })
 
     fingertip_contact = RewTerm(
         func=mdp.fingertip_contact_reward,
@@ -315,10 +289,10 @@ class RewardsCfg:
 
     finger_close = RewTerm(
         func=mdp.finger_close_reward,
-        weight=-2.0,
+        weight=5.0,
         params={
             "robot_cfg": SceneEntityCfg("robot"),
-            "contact_activation": 3.0,  # unlock once mean fingertip contacts > 3
+            "contact_activation": 3,  # unlock once mean fingertip contacts > 3
         })
 
     lift = RewTerm(
@@ -327,21 +301,29 @@ class RewardsCfg:
         params={
             "sensor_cfg": SceneEntityCfg("table_contact"),
             "threshold": 1.0,
-            "contact_activation": 4.0,  # unlock once mean fingertip contacts > 4
+            "contact_activation": 3.5,  # unlock once mean fingertip contacts > 3.5
         })
 
-    # object_vel = RewTerm(
-    #     func=mdp.object_vel,
-    #     weight=-0.1,
-    #     params={
-    #         "object_cfg": SceneEntityCfg("object")})
-    
-    # action_rate = RewTerm(func=mdp.action_rate_l2, weight=-0.01)
+    object_lateral_vel = RewTerm(
+        func=mdp.object_lateral_vel,
+        weight=-0.1,
+        params={
+            "object_cfg": SceneEntityCfg("object")})
 
-    # joint_vel_penalty = RewTerm(
-    #     func=mdp.joint_vel_l2,
-    #     weight=-0.001,
-    #     params={"asset_cfg": SceneEntityCfg("robot", joint_names=RIGHT_JOINTS)})
+    object_lift_vel = RewTerm(
+        func=mdp.object_lift_vel,
+        weight=1.0,
+        params={
+            "object_cfg": SceneEntityCfg("object"),
+            "contact_activation": 3.5,  # unlock once mean fingertip contacts > 3.5
+        })
+    
+    action_rate = RewTerm(func=mdp.action_rate_l2, weight=-0.001)
+
+    joint_vel_penalty = RewTerm(
+        func=mdp.joint_vel_l2,
+        weight=-0.0001,
+        params={"asset_cfg": SceneEntityCfg("robot", joint_names=RIGHT_JOINTS)})
     
 
 @configclass
@@ -404,7 +386,7 @@ class RoboticGraspingSystemEnvCfg(ManagerBasedRLEnvCfg):
     scene: RoboticGraspingSystemSceneCfg = RoboticGraspingSystemSceneCfg(num_envs=4096, env_spacing=2.0, replicate_physics=False)
     observations: ObservationsCfg = ObservationsCfg()
     actions: ActionsCfg = ActionsCfg()
-    # events: EventCfg = EventCfg()
+    events: EventCfg = EventCfg()
     rewards: RewardsCfg = RewardsCfg()
     terminations: TerminationsCfg = TerminationsCfg()
     # curriculum: CurriculumCfg = CurriculumCfg()
@@ -433,5 +415,5 @@ class RoboticGraspingSystemEnvCfg_PLAY(RoboticGraspingSystemEnvCfg):
         self.viewer.eye = (4.0, 0.0, 3.0)
 
         # # --- Disable domain randomization ---
-        # self.events.reset_robot.params["position_range"] = (0.0, 0.0)
-        # self.events.reset_robot.params["velocity_range"] = (0.0, 0.0)
+        self.events.reset_robot.params["position_range"] = (0.0, 0.0)
+        self.events.reset_robot.params["velocity_range"] = (0.0, 0.0)

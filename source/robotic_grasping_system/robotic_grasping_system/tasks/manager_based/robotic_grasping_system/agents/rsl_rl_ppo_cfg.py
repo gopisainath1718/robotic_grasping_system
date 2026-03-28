@@ -10,6 +10,7 @@ from isaaclab_rl.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlPpoActorCriticCfg, R
 
 @configclass
 class PPORunnerCfg(RslRlOnPolicyRunnerCfg):
+    seed = 42
     num_steps_per_env = 16
     max_iterations = 100_000
     save_interval = 500
