@@ -15,7 +15,7 @@ A reinforcement learning system for dexterous robotic grasping using the **Vega 
 |---|---|
 | [Getting Started](docs/getting_started.md) | Prerequisites, installation, asset setup |
 | [Technical Overview](docs/technical_overview.md) | Environment specs, observation/action spaces, task description |
-| [Usage](docs/usage.md) | Training, evaluation, baselines, Bayesian optimization |
+| [Usage](docs/usage.md) | Training, evaluation, Bayesian optimization |
 | [Design Decisions](docs/design_decisions.md) | Reward structure, observation design, PD gain tuning, PPO config |
 | [Iterations & Challenges](docs/iterations_and_challenges.md) | Training iterations, what worked, what didn't work, challenges |
 
@@ -56,9 +56,10 @@ Training plots are located in [`docs/plots/`](docs/plots/). These plots are gene
 
 ## Future Work
 
-- **Fix and add approach_angle** — for better pre-grasp hand orientation
-- **Depth-based object encoding** — replace bounding box with point cloud features
-- **Curriculum learning** — automatic difficulty scaling based on success rate
+- Fix and add approach_angle for better pre-grasp hand orientation
+- Depth-based object encoding replace bounding box with point cloud features
+- Curriculum learning for automatic difficulty scaling based on success rate (currently implemented only for rewards)
+- Hyperparameter optimization (PPO gains via Optuna/Bayesian optimization)
 ### Alternative Approaches
 
 - **Imitation Learning** — collect demonstrations and train a BC policy directly, bypassing reward engineering

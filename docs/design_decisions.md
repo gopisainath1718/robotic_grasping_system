@@ -5,35 +5,30 @@
 The reward is designed as a **progression**: each phase unlocks only after the previous phase is sufficiently learned. This prevents the agent from receiving conflicting gradients early in training.
 
 ```
-reach → fingertip contact → finger close → lift + lift velocity
+reach → fingertip contact → finger close + lift + lift velocity
 ```
 
 **Phase 1 — Always active:**
 
 | Reward Term | Weight | Purpose |
 |---|---|---|
-| `reach` | -2.0 | Minimize mean fingertip-to-object distance |
-| `fingertip_contact` | +1.0 | Maximize number of fingers touching object (0-5) |
-| `object_lateral_vel` | -0.1 | Penalize lateral object velocity (prevents knocking/sliding) |
-| `action_rate` | -0.001 | Smooth actions (L2 penalty on action deltas) |
+| `reach` | -1.0 | Minimize mean fingertip-to-object distance |
+| `fingertip_contact` | +1.0 | Maximize number of fingers touching object |
+| `object_lateral_vel` | -0.1 | Penalize lateral object velocity |
+| `action_rate` | -0.001 | Smooth actions |
 | `joint_vel_penalty` | -0.0001 | Regularize joint velocities |
 
 **Phase 2 — Gated by contact running mean > 3:**
 
 | Reward Term | Weight | Purpose |
 |---|---|---|
-| `finger_close` | +5.0 | Reward thumb-to-finger-centroid closeness: `1/(1 + dist)` |
+| `finger_close` | +5.0 | Reward thumb-to-finger-centroid closeness |
+| `lift` | +10.0 | Penalize table-object contact |
+| `object_lift_vel` | +10.0 | Reward upward object velocity |
 
-**Phase 3 — Gated by contact running mean > 3.5:**
+**Running mean gating**: A circular buffer (window=2000 steps) tracks the mean fingertip contact count across all environments. All gated rewards (`finger_close`, `lift`, `object_lift_vel`) activate once the running mean exceeds 3 contacts. This acts as an implicit curriculum — the agent must first learn to reach and make consistent contact before being asked to close its grip and lift.
 
-| Reward Term | Weight | Purpose |
-|---|---|---|
-| `lift` | +4.0 | Penalize table-object contact (returns -1 while touching, 0 when lifted) |
-| `object_lift_vel` | +1.0 | Reward upward object velocity (clamped >= 0) |
-
-**Running mean gating**: A circular buffer (window=2000 steps) tracks the mean fingertip contact count across all environments. `finger_close` activates at 3+ mean contacts, and `lift`/`object_lift_vel` activate at 3.5+. This acts as an implicit curriculum — the agent must first learn to reach and make contact, then close its grip, before being asked to lift.
-
-**Why negative weight for reach?** The function returns a distance (>= 0) — the negative weight converts "minimize distance" into "maximize reward." Conversely, `finger_close` now returns `1/(1 + dist)` (higher when closer), so it uses a positive weight.
+**Why negative weight for reach?** The function returns a distance (>= 0) — the negative weight converts "minimize distance" into "maximize reward." Conversely, `finger_close` returns `1/(1 + dist)` (higher when closer), so it uses a positive weight.
 
 ## Domain Randomization
 
@@ -63,7 +58,7 @@ Manual tuning of actuator PD gains was insufficient — the hand has 11 joints w
 
 | Actuator | Stiffness (K) | Damping (D) | Method |
 |---|---|---|---|
-| Arm | 191.43 | 7.35 | Bayesian Optimization |
+| Arm | 100.43 | 10.86 | Bayesian Optimization |
 | Hand | 27.08 | 0.1 | Bayesian Optimization |
 
 The optimization runs 1000 physics steps per trial, evaluating grasp stability across parallel environments. Search ranges: K in [1, 50] for hand, D in [0.1, 10].

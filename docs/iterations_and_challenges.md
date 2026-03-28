@@ -5,7 +5,7 @@
 ### Reward Iterations
 
 **`object_vel` -> split into `object_lateral_vel` + `object_lift_vel`**:
-The original `object_vel` penalty penalized all object motion equally, causing the agent to avoid the object entirely. Splitting it into lateral (penalized, -0.1) and vertical (rewarded when gated, +1.0) components solved this — the agent is discouraged from knocking but encouraged to lift.
+The original `object_vel` penalty penalized all object motion equally, causing the agent to avoid the object entirely. Splitting it into lateral (penalized, -0.1) and vertical (rewarded when gated, +10.0) components solved this — the agent is discouraged from knocking but encouraged to lift.
 
 **`action_rate_l2` and `joint_vel_l2`** (tuned weights):
 Initially disabled because they interfered with fast corrective movements. Re-enabled at very low weights (-0.001 and -0.0001 respectively) — enough to regularize without constraining the policy.

@@ -6,11 +6,11 @@
 | **Robot** | Vega Upper Body Right Arm (7-DOF arm + 11-DOF hand = 18 DOF) |
 | **Objects** | YCB dataset: mug, sugar box, tomato soup can, banana, mustard bottle |
 | **RL Algorithm** | PPO (RSL-RL) |
-| **Parallel Envs** | 4096 (training), 32 (evaluation) |
+| **Parallel Envs** | 4096 (training), 10 (evaluation) |
 | **Sim Rate** | 200 Hz physics, 100 Hz control (decimation = 2) |
 | **Observation Space** | 79 dimensions |
 | **Action Space** | 18 dimensions (joint position targets) |
-| **Episode Length** | 5s (training), 10s (evaluation) |
+| **Episode Length** | 5s |
 
 ## Task Description
 

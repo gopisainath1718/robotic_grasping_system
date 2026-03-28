@@ -11,11 +11,11 @@
 ## Installation
 
 ```bash
-# 1. Clone the repository
+# Clone the repository
 git clone <repo-url>
 cd robotic_grasping_system
 
-# 4. Verify the environment is registered
+# Verify the environment is registered
 python scripts/list_envs.py
 # Should show: Robotic-Grasping-System-v0
 ```

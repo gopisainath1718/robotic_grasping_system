@@ -273,7 +273,7 @@ class RewardsCfg:
 
     reach = RewTerm(
         func=mdp.reach_reward,
-        weight=-2.0,
+        weight=-1.0,
         params={
             "robot_cfg": SceneEntityCfg("robot", body_names=FINGERTIP_BODIES),
             "object_cfg": SceneEntityCfg("object"),
@@ -297,7 +297,7 @@ class RewardsCfg:
 
     lift = RewTerm(
         func=mdp.lift_reward,
-        weight=4.0,
+        weight=10.0,
         params={
             "sensor_cfg": SceneEntityCfg("table_contact"),
             "threshold": 1.0,
@@ -312,7 +312,7 @@ class RewardsCfg:
 
     object_lift_vel = RewTerm(
         func=mdp.object_lift_vel,
-        weight=1.0,
+        weight=10.0,
         params={
             "object_cfg": SceneEntityCfg("object"),
             "contact_activation": 3.0,  # unlock once mean fingertip contacts > 3
@@ -408,12 +408,13 @@ class RoboticGraspingSystemEnvCfg_PLAY(RoboticGraspingSystemEnvCfg):
     def __post_init__(self) -> None:
         super().__post_init__()
 
-        self.scene.num_envs = 32
-        self.scene.env_spacing = 2.5
-        self.episode_length_s = 10.0
+        self.scene.num_envs = 10
+        self.scene.env_spacing = 2.0
+        self.episode_length_s = 5
 
-        self.viewer.eye = (4.0, 0.0, 3.0)
+        self.viewer.eye = (9.0, 0.0, 4.5)
 
         # # --- Disable domain randomization ---
         self.events.reset_robot.params["position_range"] = (0.0, 0.0)
         self.events.reset_robot.params["velocity_range"] = (0.0, 0.0)
+        self.events.reset_objects.params["x_range"] = (-0.05, 0.05)
