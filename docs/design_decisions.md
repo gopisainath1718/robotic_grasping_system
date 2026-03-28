@@ -35,6 +35,18 @@ reach → fingertip contact → finger close → lift + lift velocity
 
 **Why negative weight for reach?** The function returns a distance (>= 0) — the negative weight converts "minimize distance" into "maximize reward." Conversely, `finger_close` now returns `1/(1 + dist)` (higher when closer), so it uses a positive weight.
 
+## Domain Randomization
+
+Applied on every environment reset to improve policy robustness:
+
+| Randomization | Range | Purpose |
+|---|---|---|
+| **Joint position offset** | +/-0.1 rad (~+/-5.7 deg) | Prevents the policy from memorizing a single start pose |
+| **Table height** | +/-10 cm | Generalizes across varying table surfaces |
+| **Object placement** | +/-10 cm (x and y) | Forces the policy to reach in different directions |
+
+Object type is also randomized — each environment spawns one of 5 YCB objects at random, so the policy must generalize across different shapes and sizes.
+
 ## Observation Space Design
 
 Each component serves a specific purpose:

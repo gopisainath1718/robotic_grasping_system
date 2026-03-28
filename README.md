@@ -13,11 +13,11 @@ A reinforcement learning system for dexterous robotic grasping using the **Vega 
 
 | Document | Description |
 |---|---|
-| [Technical Overview](docs/technical_overview.md) | Environment specs, observation/action spaces, task description |
 | [Getting Started](docs/getting_started.md) | Prerequisites, installation, asset setup |
+| [Technical Overview](docs/technical_overview.md) | Environment specs, observation/action spaces, task description |
 | [Usage](docs/usage.md) | Training, evaluation, baselines, Bayesian optimization |
 | [Design Decisions](docs/design_decisions.md) | Reward structure, observation design, PD gain tuning, PPO config |
-| [Challenges & Iterations](docs/challenges.md) | What didn't work, domain randomization, contact sensor tuning |
+| [Iterations & Challenges](docs/iterations_and_challenges.md) | Training iterations, what worked, what didn't work, challenges |
 
 ---
 
@@ -50,21 +50,15 @@ robotic_grasping_system/
 
 ## Results
 
-> **Training is currently in progress.**
-
-```bash
-tensorboard --logdir logs/rsl_rl/robotic_grasping_system/
-```
+Training plots are located in [`docs/plots/`](docs/plots/). These plots are generated using tensorboard.
 
 ---
 
 ## Future Work
 
-- **Enable domain randomization** incrementally for sim-to-real robustness
-- **Fix `approach_angle_reward`** for better pre-grasp hand orientation
+- **Fix and add approach_angle** for better pre-grasp hand orientation
 - **Depth-based object encoding** — replace bounding box with point cloud features
 - **Curriculum learning** — automatic difficulty scaling based on success rate
-- **Sim-to-real transfer** — deploy trained policy on physical Vega hardware
 
 ---
 
@@ -72,6 +66,8 @@ tensorboard --logdir logs/rsl_rl/robotic_grasping_system/
 
 - [Isaac Lab Documentation](https://isaac-sim.github.io/IsaacLab/)
 - [RSL-RL](https://github.com/leggedrobotics/rsl_rl)
+- [YCB Object Dataset](https://www.ycbbenchmarks.com/)
+
 - [CrossDex: Cross-Embodiment Dexterous Grasping (ICLR 2025)](https://arxiv.org/abs/2403.09181) — reward design inspiration
 - [Dexterous Functional Grasping (CoRL 2023)](https://dexfunc.github.io/) — reward design inspiration
-- [YCB Object Dataset](https://www.ycbbenchmarks.com/)
+- [Residual Policy Learning for Dexterous Manipulation](https://residual-offpolicy-rl.github.io/)

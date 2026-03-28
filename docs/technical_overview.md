@@ -3,7 +3,7 @@
 | Component | Details |
 |---|---|
 | **Platform** | NVIDIA Isaac Sim + Isaac Lab |
-| **Robot** | Vega Upper Body (7-DOF arm + 11-DOF hand = 18 DOF) |
+| **Robot** | Vega Upper Body Right Arm (7-DOF arm + 11-DOF hand = 18 DOF) |
 | **Objects** | YCB dataset: mug, sugar box, tomato soup can, banana, mustard bottle |
 | **RL Algorithm** | PPO (RSL-RL) |
 | **Parallel Envs** | 4096 (training), 32 (evaluation) |
@@ -16,7 +16,7 @@
 
 The agent controls the right arm and hand of the Vega humanoid to:
 1. **Reach** toward a randomly selected YCB object on a table
-2. **Grasp** the object using all five fingertips
+2. **Grasp** the object using fingers
 3. **Lift** the object off the table surface
 
 Success is defined as maintaining no table-object contact for 50 consecutive simulation steps.
@@ -36,4 +36,4 @@ Success is defined as maintaining no table-object contact for 50 consecutive sim
 
 Joint position targets for:
 - **Right arm** (7 DOF): `R_arm_j1` through `R_arm_j7`
-- **Right hand** (11 DOF): 4 fingers x 2 joints + thumb x 3 joints
+- **Right hand** (11 DOF): Fore finger (`R_ff_j1`, `R_ff_j2`), middle finger (`R_mf_j1`, `R_mf_j2`), ring finger (`R_rf_j1`, `R_rf_j2`), little finger (`R_lf_j1`, `R_lf_j2`), thumb (`R_th_j0`, `R_th_j1`, `R_th_j2`)
