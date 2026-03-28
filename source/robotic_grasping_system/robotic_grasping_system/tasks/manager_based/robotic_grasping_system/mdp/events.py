@@ -13,6 +13,34 @@ from isaaclab.managers import SceneEntityCfg
 if TYPE_CHECKING:
     from isaaclab.envs import ManagerBasedRLEnv
 
+import omni.usd
+from pxr import Usd, UsdGeom
+
+def _get_object_half_heights(env, env_ids: torch.Tensor, prim_path_template: str) -> torch.Tensor:
+    """Query USD stage for per-env object half-heights using BBoxCache."""
+
+
+    stage = omni.usd.get_context().get_stage()
+    bbox_cache = UsdGeom.BBoxCache(Usd.TimeCode.Default(), ["default", "render"])
+
+    half_heights = torch.zeros(len(env_ids), device=env.device)
+    bbox_dims = torch.zeros(len(env_ids), 3, device=env.device)
+    for i, env_id in enumerate(env_ids.tolist()):
+        prim_path = prim_path_template.replace("{env_id}", str(env_id))
+        prim = stage.GetPrimAtPath(prim_path)
+        if prim.IsValid():
+            bbox = bbox_cache.ComputeLocalBound(prim)
+            size = bbox.GetRange().GetSize()
+            half_heights[i] = size[1] / 2.0
+            bbox_dims[i] = torch.tensor([size[0], size[1], size[2]], device=env.device)
+
+    # Cache bbox dims on env for observation access
+    if not hasattr(env, "object_bbox_dims"):
+        env.object_bbox_dims = torch.zeros(env.num_envs, 3, device=env.device)
+    env.object_bbox_dims[env_ids] = bbox_dims
+
+    return half_heights
+
 
 def randomize_table_height(
     env: ManagerBasedRLEnv,
@@ -59,15 +87,18 @@ def randomize_object_placement(
     num_resets = len(env_ids)
     device = env.device
 
-    obj_quat = obj.data.root_quat_w[env_ids].clone()
+    obj_quat = obj.data.default_root_state[env_ids, 3:7].clone()
 
     env_origins = env.scene.env_origins[env_ids]
     obj_pos = env_origins.clone()
 
-    obj_pos[:, 0] += 0.6 + torch.rand(num_resets, device=device) * (x_range[1] - x_range[0]) + x_range[0]
+    obj_pos[:, 0] += 0.5 + torch.rand(num_resets, device=device) * (x_range[1] - x_range[0]) + x_range[0]
     obj_pos[:, 1] += 0.0 + torch.rand(num_resets, device=device) * (y_range[1] - y_range[0]) + y_range[0]
-    obj_pos[:, 2] = 0.25 + env.table_z[env_ids]
 
+    half_heights = _get_object_half_heights(env, env_ids, "/World/envs/env_{env_id}/Object")
+    table_top_z = env.table_z[env_ids] + 0.25  # table_z is center; +0.25 = half table thickness
+    obj_pos[:, 2] = table_top_z + half_heights
+    
     # TODO: add random yaw
     # yaw = torch.rand(num_resets, device=device) * 2.0 * 3.14159 - 3.14159
     # quat = torch.zeros(num_resets, 4, device=device)

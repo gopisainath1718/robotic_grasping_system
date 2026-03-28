@@ -16,7 +16,6 @@ from isaaclab.managers import CurriculumTermCfg as CurrTerm
 from isaaclab.scene import InteractiveSceneCfg
 from isaaclab.utils import configclass
 from isaaclab.sensors import ContactSensorCfg
-from isaaclab.utils.assets import ISAAC_NUCLEUS_DIR
 
 from . import mdp
 
@@ -25,51 +24,30 @@ from . import mdp
 ##
 
 YCB_OBJECTS = {
-    "cracker_box": f"{ISAAC_NUCLEUS_DIR}/Props/YCB/Axis_Aligned_Physics/003_cracker_box.usd",
-    "sugar_box": f"{ISAAC_NUCLEUS_DIR}/Props/YCB/Axis_Aligned_Physics/004_sugar_box.usd",
-    "tomato_soup_can": f"{ISAAC_NUCLEUS_DIR}/Props/YCB/Axis_Aligned_Physics/005_tomato_soup_can.usd",
-    "mustard_bottle": f"{ISAAC_NUCLEUS_DIR}/Props/YCB/Axis_Aligned_Physics/006_mustard_bottle.usd",
-    # "foam_brick": f"{ISAAC_NUCLEUS_DIR}/Props/YCB/Axis_Aligned_Physics/061_foam_brick.usd",
-}
-
-# -- Approximate bounding box dimensions [L, W, H] in meters for each object
-YCB_BBOX = {
-    "cracker_box": [0.16, 0.06, 0.21],
-    "sugar_box": [0.09, 0.04, 0.18],
-    "tomato_soup_can": [0.07, 0.07, 0.10],
-    "mustard_bottle": [0.06, 0.06, 0.19],
-    # "foam_brick":  [0.06, 0.06, 0.19],
+    "mug": f"/home/rainier/Downloads/dexmate_assignment/ycb_physics/025_mug.usd",
+    "sugar_box": f"/home/rainier/Downloads/dexmate_assignment/ycb_physics/sugar_box.usd",
+    "tomato_soup_can": f"/home/rainier/Downloads/dexmate_assignment/ycb_physics/tomato_soup_can.usd",
+    "banana": f"/home/rainier/Downloads/dexmate_assignment/ycb_physics/011_banana.usd",
+    "mustard_bottle": f"/home/rainier/Downloads/dexmate_assignment/ycb_physics/mustard_bottle.usd",
 }
 
 #TODO: Update the USD path to relative path
-# -- Robot USD path
 VEGA_USD = "/home/rainier/Downloads/dexmate_assignment/vega_upper_body-vega_1/vega_upper_body.usd"
 
-# -- Right arm + hand joint names
-RIGHT_ARM_JOINTS = [f"R_arm_j{i}" for i in range(1, 8)]  # 7 DOF
+
+RIGHT_ARM_JOINTS = [f"R_arm_j{i}" for i in range(1, 8)]
 RIGHT_HAND_JOINTS = [
-    "R_ff_j1",
-    "R_mf_j1",
-    "R_rf_j1",
-    "R_lf_j1",
-    "R_th_j0", "R_th_j1",
+    "R_ff_j1", "R_ff_j2",               # fore finger     
+    "R_mf_j1", "R_mf_j2",               # middle finger   
+    "R_rf_j1", "R_rf_j2",               # ring finger   
+    "R_lf_j1", "R_lf_j2",               # little finger   
+    "R_th_j0", "R_th_j1", "R_th_j2",    # thumb   
 ]
 
-RIGHT_HAND_MIMIC_JOINTS = [
- "R_ff_j2",   # fore finger
- "R_mf_j2",   # middle finger
- "R_rf_j2",   # ring finger
- "R_lf_j2",   # little finger
- "R_th_j2",  # thumb
-]
+RIGHT_JOINTS = RIGHT_ARM_JOINTS + RIGHT_HAND_JOINTS
 
-RIGHT_JOINTS = RIGHT_ARM_JOINTS + RIGHT_HAND_JOINTS  # 18 DOF total
-
-# -- Fingertip body names
 FINGERTIP_BODIES = ["R_ff_tip", "R_mf_tip", "R_rf_tip", "R_lf_tip", "R_th_tip"]
 
-
-#TODO: fine tune these values
 ARM_ACTUATOR_CFG = ImplicitActuatorCfg(
     joint_names_expr=["R_arm.*"],
     stiffness= 100,
@@ -87,8 +65,17 @@ ARM_ACTUATOR_CFG = ImplicitActuatorCfg(
 
 HAND_ACTUATOR_CFG = ImplicitActuatorCfg(
     joint_names_expr = RIGHT_HAND_JOINTS,
-    stiffness= 48.0,
-    damping= 1.0,
+    stiffness= 27.08,
+    damping= 0.1,
+)
+
+# adding high params to make head fixed
+HEAD_ACTUATOR_CFG = ImplicitActuatorCfg(
+                joint_names_expr=["head_j.*"],
+                stiffness=100.0,
+                damping=10.0,
+                effort_limit = 50,
+                armature = 0.2
 )
 
 
@@ -109,13 +96,35 @@ VEGA_UPPER_BODY_CFG = ArticulationCfg(
             enabled_self_collisions=True, solver_position_iteration_count=4, solver_velocity_iteration_count=0
         ),
     ),
-    #TODO: initialize such taht left arm wont come in between
+    
     init_state=ArticulationCfg.InitialStateCfg(
-        pos=(0.0, 0.0, 0.5), # 0.3
-        joint_pos={".*": 0.0},
+        pos=(0.0, 0.0, 0.5),
+        joint_pos = {
+            "R_arm_j1": -2.35619,   # -135 deg
+            "R_arm_j2": 0.0,
+            "R_arm_j3": 0.0,
+            "R_arm_j4": -2.35619,   # -135 deg
+            "R_arm_j5": 0.0,
+            "R_arm_j6": 0.0,
+            "R_arm_j7": 0.0,
+
+            "L_arm_j1": 1.5708,   # 90 deg
+            "L_arm_j2": 0.0,
+            "L_arm_j3": 0.0,
+            "L_arm_j4": 0.0,   
+            "L_arm_j5": 0.0,
+            "L_arm_j6": 0.0,
+            "L_arm_j7": 0.0,
+
+            "head_j1" : 0.0,
+            "head_j2" : 0.0,
+            "head_j3" : 0.0
+        },
         joint_vel={".*": 0.0},
     ),
-    actuators={"hand": HAND_ACTUATOR_CFG, "arm" : ARM_ACTUATOR_CFG},
+    actuators={"hand": HAND_ACTUATOR_CFG, "arm" : ARM_ACTUATOR_CFG,
+                "head" : HEAD_ACTUATOR_CFG
+                },
     soft_joint_pos_limit_factor=0.95,
 )
 
@@ -152,9 +161,8 @@ class RoboticGraspingSystemSceneCfg(InteractiveSceneCfg):
                 diffuse_color=(0.4, 0.3, 0.2),
             ),
         ),
-        #TODO: check if we can randomize here itself
         init_state=RigidObjectCfg.InitialStateCfg(
-            pos=(0.6, 0.0, 0.25),
+            pos=(0.5, 0.0, 0.25),
         ),
     )
 
@@ -162,17 +170,17 @@ class RoboticGraspingSystemSceneCfg(InteractiveSceneCfg):
         prim_path="{ENV_REGEX_NS}/Object",
         spawn=sim_utils.MultiAssetSpawnerCfg(
             assets_cfg=[
-                sim_utils.UsdFileCfg(usd_path=YCB_OBJECTS["cracker_box"]),
                 sim_utils.UsdFileCfg(usd_path=YCB_OBJECTS["sugar_box"]),
+                sim_utils.UsdFileCfg(usd_path=YCB_OBJECTS["mug"]),
+                sim_utils.UsdFileCfg(usd_path=YCB_OBJECTS["banana"]),
                 sim_utils.UsdFileCfg(usd_path=YCB_OBJECTS["tomato_soup_can"]),
                 sim_utils.UsdFileCfg(usd_path=YCB_OBJECTS["mustard_bottle"]),
             ],
             random_choice=True,
             activate_contact_sensors=True,
         ),
-        #TODO: check if we can randomize the yaw
         init_state=RigidObjectCfg.InitialStateCfg(
-            pos=(0.6, 0.0, 0.6),
+            pos=(0.5, 0.0, 0.55),
             rot=(0.7071068, -0.7071068, 0.0, 0.0),
         ),
     )
@@ -183,6 +191,31 @@ class RoboticGraspingSystemSceneCfg(InteractiveSceneCfg):
         filter_prim_paths_expr=["{ENV_REGEX_NS}/Table"],
     )
 
+    ff_contact: ContactSensorCfg = ContactSensorCfg(
+        prim_path="{ENV_REGEX_NS}/Robot/R_ff_tip",
+        update_period=0.0,
+        filter_prim_paths_expr=["{ENV_REGEX_NS}/Object"],
+    )
+    mf_contact: ContactSensorCfg = ContactSensorCfg(
+        prim_path="{ENV_REGEX_NS}/Robot/R_mf_tip",
+        update_period=0.0,
+        filter_prim_paths_expr=["{ENV_REGEX_NS}/Object"],
+    )
+    rf_contact: ContactSensorCfg = ContactSensorCfg(
+        prim_path="{ENV_REGEX_NS}/Robot/R_rf_tip",
+        update_period=0.0,
+        filter_prim_paths_expr=["{ENV_REGEX_NS}/Object"],
+    )
+    lf_contact: ContactSensorCfg = ContactSensorCfg(
+        prim_path="{ENV_REGEX_NS}/Robot/R_lf_tip",
+        update_period=0.0,
+        filter_prim_paths_expr=["{ENV_REGEX_NS}/Object"],
+    )
+    th_contact: ContactSensorCfg = ContactSensorCfg(
+        prim_path="{ENV_REGEX_NS}/Robot/R_th_tip",
+        update_period=0.0,
+        filter_prim_paths_expr=["{ENV_REGEX_NS}/Object"],
+    )
 
     robot: ArticulationCfg = VEGA_UPPER_BODY_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")
 
@@ -196,66 +229,48 @@ class RoboticGraspingSystemSceneCfg(InteractiveSceneCfg):
 @configclass
 class ActionsCfg:
     """Action specifications for the MDP."""
-
-    joint_effort = mdp.JointPositionActionCfg(
-        asset_name="robot",
-        joint_names=RIGHT_JOINTS,
-        scale=1.0,
-        )
+    joint_position = mdp.JointPositionActionCfg(asset_name="robot", joint_names=RIGHT_JOINTS, scale=1.0)
 
 
 @configclass
 class ObservationsCfg:
     """Observation specifications for the MDP."""
-
     @configclass
     class PolicyCfg(ObsGroup):
         """Observations for policy group."""
-
-        # Robot state (18 + 18 = 36)
+    
         joint_pos = ObsTerm(
             func=mdp.joint_pos,
-            params={"asset_cfg": SceneEntityCfg("robot", joint_names=RIGHT_JOINTS)},
-            )
+            params={"asset_cfg": SceneEntityCfg("robot", joint_names=RIGHT_JOINTS)})
+        
         joint_vel = ObsTerm(
             func=mdp.joint_vel,
-            params={"asset_cfg": SceneEntityCfg("robot", joint_names=RIGHT_JOINTS)},
-            )
-        # Fingertip positions(5 * 3 = 15)
+            params={"asset_cfg": SceneEntityCfg("robot", joint_names=RIGHT_JOINTS)})
+        
         fingertip_pos = ObsTerm(
             func=mdp.body_pos_w,
-            params={"asset_cfg": SceneEntityCfg("robot", body_names=FINGERTIP_BODIES)},
-        )
-        # Object state (3 + 4 = 7)
+            params={"asset_cfg": SceneEntityCfg("robot", body_names=FINGERTIP_BODIES)})
+        
         object_pose = ObsTerm(
             func=mdp.body_pose_w,
-            params={
-                "asset_cfg": SceneEntityCfg("object"),
-            },
-        )
-        # Fingertip-to-object(5 * 3 = 15)
+            params={"asset_cfg": SceneEntityCfg("object")})
+        
+        #TODO: change this from geometry to depth points
+        object_bbox = ObsTerm(func=mdp.object_bbox_dims)
+
         fingertip_to_object = ObsTerm(
             func=mdp.fingertip_to_object,
             params={
                 "robot_cfg": SceneEntityCfg("robot", body_names=FINGERTIP_BODIES),
-                "object_cfg": SceneEntityCfg("object"),
-            },
-        )
-        #TODO: need to check this and implement
-        # Object identity: bbox dims + one-hot (3 + 4 = 7)
-        # object_encoding = ObsTerm(
-        #     func=mdp.object_encoding,
-        #     params={"object_cfg": SceneEntityCfg("object")},
-        # )
+                "object_cfg": SceneEntityCfg("object")})
 
         def __post_init__(self) -> None:
             self.enable_corruption = False
             self.concatenate_terms = True
 
-    # observation groups
     policy: PolicyCfg = PolicyCfg()
 
-#TODO: check all the rewards
+
 @configclass
 class RewardsCfg:
     """Reward terms for the MDP."""
@@ -264,60 +279,83 @@ class RewardsCfg:
         func=mdp.reach_reward,
         weight=-1.0,
         params={
-            "robot_cfg": SceneEntityCfg("robot", body_names=FINGERTIP_BODIES),
+            "robot_cfg": SceneEntityCfg("robot", body_names=["R_hand_base"]),
             "object_cfg": SceneEntityCfg("object"),
-        },
-    )
-    grasp = RewTerm(
-        func=mdp.grasp_reward,
-        weight=-1.0,
+        })
+
+    # TODO: Bug for alignment
+    # approach_angle = RewTerm(
+    #     func=mdp.approach_angle_reward,
+    #     weight=0.1,
+    #     params={
+    #         "robot_cfg": SceneEntityCfg("robot", body_names=["R_hand_base"]),
+    #         "object_cfg": SceneEntityCfg("object"),
+    #         "blend_distance": 0.15,  # must match reach
+    #         "blend_sharpness": 25.0, # must match reach
+    #     })
+    
+    # grasp = RewTerm(
+    #     func=mdp.grasp_reward,
+    #     weight=2.0,
+    #     params={
+    #         "robot_cfg": SceneEntityCfg("robot", body_names=FINGERTIP_BODIES),
+    #         "object_cfg": SceneEntityCfg("object"),
+    #         "centering_scale": 0.05,   # [m] perp dist at which centering → 0
+    #         "blend_distance":  0.15,   # must match reach / approach_angle
+    #         "blend_sharpness": 25.0,
+    #     })
+
+    fingertip_contact = RewTerm(
+        func=mdp.fingertip_contact_reward,
+        weight=1.0,
         params={
-            "robot_cfg": SceneEntityCfg("robot", body_names=FINGERTIP_BODIES),
-            "object_cfg": SceneEntityCfg("object"),
-        },
-    )
-    object_vel = RewTerm(
-        func=mdp.object_vel,
-        weight=-0.1,
+            "sensor_names": ["ff_contact", "mf_contact", "rf_contact", "lf_contact", "th_contact"],
+            "threshold": 0.5,
+        })
+
+    finger_close = RewTerm(
+        func=mdp.finger_close_reward,
+        weight=-2.0,
         params={
-            "object_cfg": SceneEntityCfg("object"),
-        },        
-    )
+            "robot_cfg": SceneEntityCfg("robot"),
+            "contact_activation": 3.0,  # unlock once mean fingertip contacts > 3
+        })
+
     lift = RewTerm(
         func=mdp.lift_reward,
-        weight=10.0,
+        weight=4.0,
         params={
             "sensor_cfg": SceneEntityCfg("table_contact"),
-            "threshold": 1.0
-        },
-    )
-    action_rate = RewTerm(
-        func=mdp.action_rate_l2,
-        weight=-0.01,
-    )
-    joint_vel_penalty = RewTerm(
-        func=mdp.joint_vel_l2,
-        weight=-0.001,
-        params={"asset_cfg": SceneEntityCfg("robot", joint_names=RIGHT_JOINTS)},
-    )
+            "threshold": 1.0,
+            "contact_activation": 4.0,  # unlock once mean fingertip contacts > 4
+        })
+
+    # object_vel = RewTerm(
+    #     func=mdp.object_vel,
+    #     weight=-0.1,
+    #     params={
+    #         "object_cfg": SceneEntityCfg("object")})
+    
+    # action_rate = RewTerm(func=mdp.action_rate_l2, weight=-0.01)
+
+    # joint_vel_penalty = RewTerm(
+    #     func=mdp.joint_vel_l2,
+    #     weight=-0.001,
+    #     params={"asset_cfg": SceneEntityCfg("robot", joint_names=RIGHT_JOINTS)})
+    
 
 @configclass
 class TerminationsCfg:
     """Termination terms for the MDP."""
 
     time_out = DoneTerm(func=mdp.time_out, time_out=True)
-    # object_dropped = DoneTerm(
-    #     func=mdp.object_dropped,
-    #     params={"asset_cfg": SceneEntityCfg("object"), "min_height": 0.0},
-    # )
+
     object_lifted = DoneTerm(
         func=mdp.object_lifted_success,
         time_out=True,
         params={
             "sensor_cfg": SceneEntityCfg("table_contact"),
-            "hold_steps": 50,
-        },
-    )
+            "hold_steps": 50})
 
 
 @configclass
@@ -331,29 +369,23 @@ class EventCfg:
         params={
             "asset_cfg": SceneEntityCfg("robot"),
             "position_range": (-0.1, 0.1),
-            "velocity_range": (0.01, 0.01),
-        },
-    )
+            "velocity_range": (0.01, 0.01)})
 
-    reset_objects = EventTerm(
-        func=mdp.reset_root_state_uniform,
+
+    reset_table = EventTerm(
+        func=mdp.randomize_table_height,
         mode="reset",
         params={
-            "asset_cfg": SceneEntityCfg("object"),
-            "pose_range": {"x": (-0.3, 0.3), "y": (-0.3, 0.3), "z": (0.0, 0.0)},
-            "velocity_range": {},
-        },
-    )
+            "table_cfg": SceneEntityCfg("table"),
+            "delta_range": (-0.1, 0.1)})
 
-    # TODO: need to add this
-    # reset_table = EventTerm(
-    #     func=mdp.randomize_table_height,
-    #     mode="reset",
-    #     params={
-    #         "table_cfg": SceneEntityCfg("table"),
-    #         "delta_range": (-0.10, 0.10),
-    #     },
-    # )
+    reset_objects = EventTerm(
+        func = mdp.randomize_object_placement,
+        mode="reset",
+        params={
+            "object_cfg": SceneEntityCfg("object"),
+            "x_range": (-0.1, 0.1),
+            "y_range": (-0.1, 0.1)})
 
 
 # @configclass
@@ -372,7 +404,7 @@ class RoboticGraspingSystemEnvCfg(ManagerBasedRLEnvCfg):
     scene: RoboticGraspingSystemSceneCfg = RoboticGraspingSystemSceneCfg(num_envs=4096, env_spacing=2.0, replicate_physics=False)
     observations: ObservationsCfg = ObservationsCfg()
     actions: ActionsCfg = ActionsCfg()
-    events: EventCfg = EventCfg()
+    # events: EventCfg = EventCfg()
     rewards: RewardsCfg = RewardsCfg()
     terminations: TerminationsCfg = TerminationsCfg()
     # curriculum: CurriculumCfg = CurriculumCfg()
@@ -381,7 +413,25 @@ class RoboticGraspingSystemEnvCfg(ManagerBasedRLEnvCfg):
     def __post_init__(self) -> None:
         """Post initialization."""
         self.decimation = 2
-        self.episode_length_s = 10
+        self.episode_length_s = 5
         self.viewer.eye = (8.0, 0.0, 5.0)
         self.sim.dt = 1 / 200
         self.sim.render_interval = self.decimation
+
+
+@configclass
+class RoboticGraspingSystemEnvCfg_PLAY(RoboticGraspingSystemEnvCfg):
+    """Evaluation configuration."""
+
+    def __post_init__(self) -> None:
+        super().__post_init__()
+
+        self.scene.num_envs = 32
+        self.scene.env_spacing = 2.5
+        self.episode_length_s = 10.0
+
+        self.viewer.eye = (4.0, 0.0, 3.0)
+
+        # # --- Disable domain randomization ---
+        # self.events.reset_robot.params["position_range"] = (0.0, 0.0)
+        # self.events.reset_robot.params["velocity_range"] = (0.0, 0.0)

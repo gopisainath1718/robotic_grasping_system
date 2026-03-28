@@ -92,6 +92,12 @@ def main():
     # create isaac environment
     env = gym.make(args_cli.task, cfg=env_cfg, render_mode="rgb_array" if args_cli.video else None)
 
+    # --- debug visualization ---
+    from robotic_grasping_system.tasks.manager_based.robotic_grasping_system import mdp
+    mdp.enable_debug_vis()
+    # mdp.set_debug_vis_envs([0])  # default is env 0 only
+    # ---------------------------
+
     # convert to single-agent instance if required by the RL algorithm
     if isinstance(env.unwrapped, DirectMARLEnv):
         env = multi_agent_to_single_agent(env)

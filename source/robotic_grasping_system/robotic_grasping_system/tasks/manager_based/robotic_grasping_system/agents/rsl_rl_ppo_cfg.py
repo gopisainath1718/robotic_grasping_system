@@ -12,7 +12,7 @@ from isaaclab_rl.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlPpoActorCriticCfg, R
 class PPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 16
     max_iterations = 100_000
-    save_interval = 5000
+    save_interval = 500
     experiment_name = "robotic_grasping_system"
     empirical_normalization = True
     policy = RslRlPpoActorCriticCfg(

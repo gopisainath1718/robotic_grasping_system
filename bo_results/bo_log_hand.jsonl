@@ -1,100 +1,100 @@
-{"trial": 0, "stiffness": 21.85, "damping": 6.7, "ss_error": 0.3737589706480503, "ss_velocity": 0.03288218609057367, "mean_error": 0.3754738832563162, "cost": 0.459942}
-{"trial": 1, "stiffness": 37.94, "damping": 4.59, "ss_error": 0.2573948211967945, "ss_velocity": 0.05038737837225199, "mean_error": 0.26217589765042065, "cost": 0.353328}
-{"trial": 2, "stiffness": 12.02, "damping": 1.94, "ss_error": 0.29895919129252435, "ss_velocity": 0.04462170030921698, "mean_error": 0.30302467024326324, "cost": 0.347119}
-{"trial": 3, "stiffness": 7.61, "damping": 6.2, "ss_error": 0.4684600369632244, "ss_velocity": 0.029053799379616975, "mean_error": 0.4592274511754513, "cost": 0.534865}
-{"trial": 4, "stiffness": 32.05, "damping": 5.25, "ss_error": 0.29523944526910784, "ss_velocity": 0.04494663367047906, "mean_error": 0.2995627702474594, "cost": 0.387252}
-{"trial": 5, "stiffness": 5.93, "damping": 6.82, "ss_error": 0.4875422041118145, "ss_velocity": 0.02333275678567588, "mean_error": 0.4744875108897686, "cost": 0.553845}
-{"trial": 6, "stiffness": 42.46, "damping": 2.27, "ss_error": 0.16458828635513784, "ss_velocity": 0.05940741572529078, "mean_error": 0.17021738110110163, "cost": 0.252995}
-{"trial": 7, "stiffness": 13.18, "damping": 2.1, "ss_error": 0.2968604037165642, "ss_velocity": 0.04491609949618578, "mean_error": 0.30098524083197115, "cost": 0.347504}
-{"trial": 8, "stiffness": 18.69, "damping": 4.15, "ss_error": 0.3351235882937908, "ss_velocity": 0.03852757000364363, "mean_error": 0.33852253614366057, "cost": 0.402711}
-{"trial": 9, "stiffness": 24.44, "damping": 2.75, "ss_error": 0.2503813885897398, "ss_velocity": 0.051320910062640904, "mean_error": 0.25513650523126125, "cost": 0.320103}
-{"trial": 10, "stiffness": 49.01, "damping": 1.04, "ss_error": 0.0927243983745575, "ss_velocity": 0.06047367995604873, "mean_error": 0.11918081046827138, "cost": 0.179371}
-{"trial": 11, "stiffness": 48.63, "damping": 1.03, "ss_error": 0.09292655996978283, "ss_velocity": 0.060455603934824464, "mean_error": 0.11908583940938115, "cost": 0.179153}
-{"trial": 12, "stiffness": 49.59, "damping": 1.23, "ss_error": 0.10041480716317892, "ss_velocity": 0.060232874918729064, "mean_error": 0.11870036927890032, "cost": 0.188926}
-{"trial": 13, "stiffness": 49.32, "damping": 1.07, "ss_error": 0.09368534080684185, "ss_velocity": 0.06046740878373384, "mean_error": 0.11898695704061538, "cost": 0.180847}
-{"trial": 14, "stiffness": 41.06, "damping": 3.28, "ss_error": 0.2078115826845169, "ss_velocity": 0.05606923121958971, "mean_error": 0.21277554539591073, "cost": 0.300315}
-{"trial": 15, "stiffness": 34.83, "damping": 3.25, "ss_error": 0.22637152016162873, "ss_velocity": 0.05416412064805627, "mean_error": 0.23123147589713336, "cost": 0.311462}
-{"trial": 16, "stiffness": 44.25, "damping": 1.55, "ss_error": 0.12496430590748787, "ss_velocity": 0.06123261963948608, "mean_error": 0.13261168457195163, "cost": 0.210904}
-{"trial": 17, "stiffness": 32.11, "damping": 2.91, "ss_error": 0.22345212556421756, "ss_velocity": 0.054479482471942904, "mean_error": 0.2283431436046958, "cost": 0.303588}
-{"trial": 18, "stiffness": 45.67, "damping": 1.03, "ss_error": 0.09579725109040738, "ss_velocity": 0.060291089490056037, "mean_error": 0.12002013477496803, "cost": 0.178933}
-{"trial": 19, "stiffness": 44.88, "damping": 1.86, "ss_error": 0.1398162481188774, "ss_velocity": 0.06064663417637348, "mean_error": 0.14634998228028417, "cost": 0.228341}
-{"trial": 20, "stiffness": 28.4, "damping": 5.14, "ss_error": 0.30804305255413056, "ss_velocity": 0.04292775692418218, "mean_error": 0.31213598902523515, "cost": 0.394597}
-{"trial": 21, "stiffness": 46.76, "damping": 1.12, "ss_error": 0.09899331767112017, "ss_velocity": 0.06023452140390873, "mean_error": 0.11903868494182825, "cost": 0.183897}
-{"trial": 22, "stiffness": 38.73, "damping": 2.48, "ss_error": 0.18367360197007657, "ss_velocity": 0.058130990378558636, "mean_error": 0.18865631307661535, "cost": 0.269189}
-{"trial": 23, "stiffness": 49.84, "damping": 1.58, "ss_error": 0.11597788419574499, "ss_velocity": 0.06157167728990316, "mean_error": 0.12695289617218078, "cost": 0.207851}
-{"trial": 24, "stiffness": 46.54, "damping": 1.02, "ss_error": 0.09450177621096373, "ss_velocity": 0.06035225236788392, "mean_error": 0.11939773218892515, "cost": 0.178483}
-{"trial": 25, "stiffness": 40.13, "damping": 1.65, "ss_error": 0.1391718489676714, "ss_velocity": 0.06057556284591556, "mean_error": 0.14581054515205324, "cost": 0.221339}
-{"trial": 26, "stiffness": 35.46, "damping": 3.69, "ss_error": 0.239405587464571, "ss_velocity": 0.05266273139044642, "mean_error": 0.2441963673979044, "cost": 0.327555}
-{"trial": 27, "stiffness": 46.13, "damping": 1.51, "ss_error": 0.11926916539669037, "ss_velocity": 0.06148463940247893, "mean_error": 0.12858194121345878, "cost": 0.206948}
-{"trial": 28, "stiffness": 43.03, "damping": 2.45, "ss_error": 0.17070727474987507, "ss_velocity": 0.05902351465076208, "mean_error": 0.17635680412873625, "cost": 0.260728}
-{"trial": 29, "stiffness": 46.33, "damping": 6.28, "ss_error": 0.2706552413105965, "ss_velocity": 0.048536519184708596, "mean_error": 0.27532221291959286, "cost": 0.386089}
-{"trial": 30, "stiffness": 20.31, "damping": 1.99, "ss_error": 0.23529167011380195, "ss_velocity": 0.0531614500656724, "mean_error": 0.23998417318612336, "cost": 0.296414}
-{"trial": 31, "stiffness": 46.94, "damping": 1.26, "ss_error": 0.10489543460309506, "ss_velocity": 0.05991974730044603, "mean_error": 0.12217695960216224, "cost": 0.190785}
-{"trial": 32, "stiffness": 37.06, "damping": 1.05, "ss_error": 0.10970225356519223, "ss_velocity": 0.05985846009105444, "mean_error": 0.12354562229476869, "cost": 0.184222}
-{"trial": 33, "stiffness": 43.02, "damping": 1.01, "ss_error": 0.09820657689124346, "ss_velocity": 0.060178752467036245, "mean_error": 0.11985584766883403, "cost": 0.178527}
-{"trial": 34, "stiffness": 41.44, "damping": 1.82, "ss_error": 0.1452149872481823, "ss_velocity": 0.060320145692676304, "mean_error": 0.15146365764923395, "cost": 0.229797}
-{"trial": 35, "stiffness": 43.72, "damping": 1.5, "ss_error": 0.12304626237601042, "ss_velocity": 0.06128238346427679, "mean_error": 0.1309473835658282, "cost": 0.208102}
-{"trial": 36, "stiffness": 38.53, "damping": 1.42, "ss_error": 0.12988754361867905, "ss_velocity": 0.060942126549780366, "mean_error": 0.13699396774359046, "cost": 0.209024}
-{"trial": 37, "stiffness": 32.97, "damping": 2.08, "ss_error": 0.18282341539859773, "ss_velocity": 0.058144730199128386, "mean_error": 0.18779051845148206, "cost": 0.259726}
-{"trial": 38, "stiffness": 28.3, "damping": 4.76, "ss_error": 0.2989019140601158, "ss_velocity": 0.04439835909754038, "mean_error": 0.3031515815854073, "cost": 0.383376}
-{"trial": 39, "stiffness": 40.08, "damping": 2.28, "ss_error": 0.1708297099918127, "ss_velocity": 0.058985610175877806, "mean_error": 0.17644487611204385, "cost": 0.256657}
-{"trial": 40, "stiffness": 47.55, "damping": 2.77, "ss_error": 0.1727150247991085, "ss_velocity": 0.05892651330679655, "mean_error": 0.1783630972802639, "cost": 0.269496}
-{"trial": 41, "stiffness": 48.15, "damping": 1.05, "ss_error": 0.09440075565129519, "ss_velocity": 0.06040786938741803, "mean_error": 0.11931606256309897, "cost": 0.18029}
-{"trial": 42, "stiffness": 44.18, "damping": 1.77, "ss_error": 0.13677602894604207, "ss_velocity": 0.06074367670342326, "mean_error": 0.14359539115801453, "cost": 0.223992}
-{"trial": 43, "stiffness": 45.41, "damping": 1.38, "ss_error": 0.11323524609208108, "ss_velocity": 0.061379708033055064, "mean_error": 0.12534738204441964, "cost": 0.199182}
-{"trial": 44, "stiffness": 49.96, "damping": 1.3, "ss_error": 0.10282445330172778, "ss_velocity": 0.060104432944208384, "mean_error": 0.1205889811590314, "cost": 0.192114}
-{"trial": 45, "stiffness": 13.74, "damping": 1.06, "ss_error": 0.21127730302512646, "ss_velocity": 0.05548551514744759, "mean_error": 0.21600691172480582, "cost": 0.260317}
-{"trial": 46, "stiffness": 42.2, "damping": 5.78, "ss_error": 0.2721179828047752, "ss_velocity": 0.04834004860371351, "mean_error": 0.2767608852684498, "cost": 0.379744}
-{"trial": 47, "stiffness": 48.05, "damping": 1.0, "ss_error": 0.09214790973812342, "ss_velocity": 0.060446825493127104, "mean_error": 0.12033781549148262, "cost": 0.177572}
-{"trial": 48, "stiffness": 47.87, "damping": 2.19, "ss_error": 0.14853335812687873, "ss_velocity": 0.060302696265280245, "mean_error": 0.15475243639945985, "cost": 0.242194}
-{"trial": 49, "stiffness": 42.29, "damping": 1.86, "ss_error": 0.14556807599961757, "ss_velocity": 0.060315570514649156, "mean_error": 0.15179585371352733, "cost": 0.231329}
-{"trial": 50, "stiffness": 25.41, "damping": 1.39, "ss_error": 0.1694921138882637, "ss_velocity": 0.05883526412770152, "mean_error": 0.1749652934074402, "cost": 0.234244}
-{"trial": 51, "stiffness": 45.03, "damping": 1.26, "ss_error": 0.10742060985416174, "ss_velocity": 0.05984454894438386, "mean_error": 0.12322203074768186, "cost": 0.191339}
-{"trial": 52, "stiffness": 48.54, "damping": 1.05, "ss_error": 0.09370944146066904, "ss_velocity": 0.060442342832684515, "mean_error": 0.11901617224607616, "cost": 0.179947}
-{"trial": 53, "stiffness": 49.96, "damping": 1.68, "ss_error": 0.12118132673203945, "ss_velocity": 0.061521261129528285, "mean_error": 0.13004675570875407, "cost": 0.213932}
-{"trial": 54, "stiffness": 45.71, "damping": 4.23, "ss_error": 0.2246738936752081, "ss_velocity": 0.05433880051597953, "mean_error": 0.22958855801820754, "cost": 0.327792}
-{"trial": 55, "stiffness": 48.26, "damping": 1.02, "ss_error": 0.09256330799311399, "ss_velocity": 0.060437354668974874, "mean_error": 0.11954891289304942, "cost": 0.178293}
-{"trial": 56, "stiffness": 43.5, "damping": 1.28, "ss_error": 0.11102652154862881, "ss_velocity": 0.060543747190386056, "mean_error": 0.1235857331417501, "cost": 0.193917}
-{"trial": 57, "stiffness": 40.23, "damping": 1.61, "ss_error": 0.13690284684300422, "ss_velocity": 0.06066612061113119, "mean_error": 0.14372270816378296, "cost": 0.218958}
-{"trial": 58, "stiffness": 47.71, "damping": 1.01, "ss_error": 0.09291579123586416, "ss_velocity": 0.060425111278891566, "mean_error": 0.11914364149235189, "cost": 0.178055}
-{"trial": 59, "stiffness": 36.79, "damping": 1.0, "ss_error": 0.10691272918134928, "ss_velocity": 0.059518696311861276, "mean_error": 0.1236592732258141, "cost": 0.180608}
-{"trial": 60, "stiffness": 47.4, "damping": 1.7, "ss_error": 0.1263485335186124, "ss_velocity": 0.061246347595006224, "mean_error": 0.13378925236687064, "cost": 0.216476}
-{"trial": 61, "stiffness": 45.76, "damping": 1.22, "ss_error": 0.10449033059179783, "ss_velocity": 0.05989758962765336, "mean_error": 0.1219649554239586, "cost": 0.188884}
-{"trial": 62, "stiffness": 48.05, "damping": 1.44, "ss_error": 0.11204038310796022, "ss_velocity": 0.06115111969411373, "mean_error": 0.1245179336424917, "cost": 0.200953}
-{"trial": 63, "stiffness": 44.42, "damping": 1.28, "ss_error": 0.10985567554831505, "ss_velocity": 0.06019994916394353, "mean_error": 0.12226667281240225, "cost": 0.193548}
-{"trial": 64, "stiffness": 46.61, "damping": 1.99, "ss_error": 0.1420353665947914, "ss_velocity": 0.06057535767555237, "mean_error": 0.14839726866036654, "cost": 0.233133}
-{"trial": 65, "stiffness": 49.12, "damping": 6.94, "ss_error": 0.27559340849518776, "ss_velocity": 0.04782887963578105, "mean_error": 0.2802136154770851, "cost": 0.39818}
-{"trial": 66, "stiffness": 42.77, "damping": 1.5, "ss_error": 0.1252875939756632, "ss_velocity": 0.06118948444724083, "mean_error": 0.1328981698639691, "cost": 0.209376}
-{"trial": 67, "stiffness": 41.08, "damping": 3.57, "ss_error": 0.2176175282150507, "ss_velocity": 0.05510228494182229, "mean_error": 0.22254083520174026, "cost": 0.31175}
-{"trial": 68, "stiffness": 46.64, "damping": 2.41, "ss_error": 0.1604014964401722, "ss_velocity": 0.05969307152554393, "mean_error": 0.16613264578208328, "cost": 0.254072}
-{"trial": 69, "stiffness": 48.46, "damping": 1.21, "ss_error": 0.10083547782152891, "ss_velocity": 0.06019257046282291, "mean_error": 0.11894361952785402, "cost": 0.188052}
-{"trial": 70, "stiffness": 17.47, "damping": 1.01, "ss_error": 0.17878328777849675, "ss_velocity": 0.05797503475099802, "mean_error": 0.1842184352837503, "cost": 0.232481}
-{"trial": 71, "stiffness": 44.82, "damping": 1.18, "ss_error": 0.10398609813302756, "ss_velocity": 0.05989275200292468, "mean_error": 0.12174332577828317, "cost": 0.187175}
-{"trial": 72, "stiffness": 5.65, "damping": 1.58, "ss_error": 0.37307960122823713, "ss_velocity": 0.03288407896645367, "mean_error": 0.3745654106587172, "cost": 0.406455}
-{"trial": 73, "stiffness": 49.02, "damping": 1.0, "ss_error": 0.09127177473157644, "ss_velocity": 0.06052035504952073, "mean_error": 0.12306670028716325, "cost": 0.177721}
-{"trial": 74, "stiffness": 30.25, "damping": 1.46, "ss_error": 0.15613008327782155, "ss_velocity": 0.05964247580617666, "mean_error": 0.1618849906437099, "cost": 0.226635}
-{"trial": 75, "stiffness": 48.69, "damping": 1.19, "ss_error": 0.09956100486218929, "ss_velocity": 0.0602390649728477, "mean_error": 0.11848814464081078, "cost": 0.186853}
-{"trial": 76, "stiffness": 46.92, "damping": 1.72, "ss_error": 0.1285341652482748, "ss_velocity": 0.06114782270044088, "mean_error": 0.13579339024238288, "cost": 0.218319}
-{"trial": 77, "stiffness": 43.88, "damping": 1.89, "ss_error": 0.14314647257328034, "ss_velocity": 0.060485767628997565, "mean_error": 0.14943866015970708, "cost": 0.230758}
-{"trial": 78, "stiffness": 45.74, "damping": 1.41, "ss_error": 0.11439755048602819, "ss_velocity": 0.06141330013051629, "mean_error": 0.12604986709356308, "cost": 0.200917}
-{"trial": 79, "stiffness": 49.09, "damping": 1.18, "ss_error": 0.09873830489814281, "ss_velocity": 0.0603365471214056, "mean_error": 0.11946597497351467, "cost": 0.18642}
-{"trial": 80, "stiffness": 49.99, "damping": 1.01, "ss_error": 0.09061234574764968, "ss_velocity": 0.060559200793504714, "mean_error": 0.12280388917028905, "cost": 0.178092}
-{"trial": 81, "stiffness": 8.73, "damping": 1.0, "ss_error": 0.26234326511621475, "ss_velocity": 0.049724036399275064, "mean_error": 0.26674126214534044, "cost": 0.303096}
-{"trial": 82, "stiffness": 47.5, "damping": 1.35, "ss_error": 0.10826996397227048, "ss_velocity": 0.06004554945975542, "mean_error": 0.12288470101356506, "cost": 0.195411}
-{"trial": 83, "stiffness": 49.51, "damping": 1.16, "ss_error": 0.09735898423939943, "ss_velocity": 0.06040533069521189, "mean_error": 0.11960332140792161, "cost": 0.185332}
-{"trial": 84, "stiffness": 47.69, "damping": 1.36, "ss_error": 0.10845162507146597, "ss_velocity": 0.06007212745025754, "mean_error": 0.12262775075808167, "cost": 0.195869}
-{"trial": 85, "stiffness": 46.24, "damping": 1.6, "ss_error": 0.12382855638861656, "ss_velocity": 0.061314459294080734, "mean_error": 0.13162196678295732, "cost": 0.212171}
-{"trial": 86, "stiffness": 44.92, "damping": 1.13, "ss_error": 0.10158602457493543, "ss_velocity": 0.060071280896663665, "mean_error": 0.11945869426429272, "cost": 0.184639}
-{"trial": 87, "stiffness": 42.13, "damping": 1.01, "ss_error": 0.0992799635976553, "ss_velocity": 0.06005956165492535, "mean_error": 0.11905431140214205, "cost": 0.178642}
-{"trial": 88, "stiffness": 41.77, "damping": 1.0, "ss_error": 0.09935112852603196, "ss_velocity": 0.06003983424976468, "mean_error": 0.11899943931866437, "cost": 0.178289}
-{"trial": 89, "stiffness": 40.06, "damping": 1.51, "ss_error": 0.13151101037859916, "ss_velocity": 0.06091936292126775, "mean_error": 0.1384958926551044, "cost": 0.21279}
-{"trial": 90, "stiffness": 43.19, "damping": 5.32, "ss_error": 0.25923882946372034, "ss_velocity": 0.050130992624908687, "mean_error": 0.2640105679109693, "cost": 0.365522}
-{"trial": 91, "stiffness": 42.06, "damping": 1.01, "ss_error": 0.09919485308229924, "ss_velocity": 0.06006917642429471, "mean_error": 0.11920697777159513, "cost": 0.178468}
-{"trial": 92, "stiffness": 41.89, "damping": 1.31, "ss_error": 0.11619822051376104, "ss_velocity": 0.061371820755302904, "mean_error": 0.12720736514776945, "cost": 0.198158}
-{"trial": 93, "stiffness": 39.13, "damping": 1.15, "ss_error": 0.11171377845108509, "ss_velocity": 0.060572855714708565, "mean_error": 0.12442238235101104, "cost": 0.189352}
-{"trial": 94, "stiffness": 41.43, "damping": 1.01, "ss_error": 0.10045800928026438, "ss_velocity": 0.059971691835671664, "mean_error": 0.11892654593102633, "cost": 0.179114}
-{"trial": 95, "stiffness": 34.1, "damping": 1.14, "ss_error": 0.12244122348725796, "ss_velocity": 0.06108214324340224, "mean_error": 0.13121297517046332, "cost": 0.195218}
-{"trial": 96, "stiffness": 43.22, "damping": 1.33, "ss_error": 0.11454089608043433, "ss_velocity": 0.061348080933094025, "mean_error": 0.12618246665783225, "cost": 0.197936}
-{"trial": 97, "stiffness": 44.28, "damping": 1.75, "ss_error": 0.1353000793606043, "ss_velocity": 0.060833993069827556, "mean_error": 0.14214866226539016, "cost": 0.222485}
-{"trial": 98, "stiffness": 37.1, "damping": 1.48, "ss_error": 0.13702043257653712, "ss_velocity": 0.060593368709087374, "mean_error": 0.14383970835991203, "cost": 0.21498}
-{"trial": 99, "stiffness": 39.13, "damping": 1.27, "ss_error": 0.11932359155267477, "ss_velocity": 0.06130645032972097, "mean_error": 0.12865314286388457, "cost": 0.198185}
+{"trial": 0, "stiffness": 19.35, "damping": 9.51, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.066913}
+{"trial": 1, "stiffness": 36.87, "damping": 6.03, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.067001}
+{"trial": 2, "stiffness": 8.64, "damping": 1.64, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.016867}
+{"trial": 3, "stiffness": 3.85, "damping": 8.68, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.047222}
+{"trial": 4, "stiffness": 30.45, "damping": 7.11, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.066004}
+{"trial": 5, "stiffness": 2.01, "damping": 9.7, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.050519}
+{"trial": 6, "stiffness": 41.79, "damping": 2.2, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.0528}
+{"trial": 7, "stiffness": 9.91, "damping": 1.92, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.019488}
+{"trial": 8, "stiffness": 15.91, "damping": 5.3, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.042383}
+{"trial": 9, "stiffness": 22.17, "damping": 2.98, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.037081}
+{"trial": 10, "stiffness": 47.31, "damping": 0.16, "ss_error": 0.4486279039084911, "ss_vel_j1": 0.9145321211218834, "ss_vel_j2": 1.7317443436384201, "mean_error": 0.4171318047642708, "cost": 1.819875}
+{"trial": 11, "stiffness": 48.51, "damping": 0.15, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.04927}
+{"trial": 12, "stiffness": 28.72, "damping": 0.48, "ss_error": 0.45182977184653283, "ss_vel_j1": 0.9376958328485488, "ss_vel_j2": 1.777942886352539, "mean_error": 0.4100142348259687, "cost": 1.840781}
+{"trial": 13, "stiffness": 29.4, "damping": 0.16, "ss_error": 0.450681507140398, "ss_vel_j1": 0.9180153435468674, "ss_vel_j2": 1.7382219272851944, "mean_error": 0.4176911146491766, "cost": 1.80899}
+{"trial": 14, "stiffness": 48.75, "damping": 3.86, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.068038}
+{"trial": 15, "stiffness": 36.2, "damping": 3.81, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.05524}
+{"trial": 16, "stiffness": 42.21, "damping": 1.01, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.047255}
+{"trial": 17, "stiffness": 34.28, "damping": 3.25, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.050531}
+{"trial": 18, "stiffness": 42.65, "damping": 0.14, "ss_error": 0.44897759824991224, "ss_vel_j1": 0.9162272414565087, "ss_vel_j2": 1.731895046234131, "mean_error": 0.4162564105093479, "cost": 1.816392}
+{"trial": 19, "stiffness": 26.23, "damping": 1.53, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.033865}
+{"trial": 20, "stiffness": 40.58, "damping": 6.93, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.075214}
+{"trial": 21, "stiffness": 44.7, "damping": 0.3, "ss_error": 0.44898947700858116, "ss_vel_j1": 0.9256434202194214, "ss_vel_j2": 1.7521266257762909, "mean_error": 0.4190084285289049, "cost": 1.834101}
+{"trial": 22, "stiffness": 49.43, "damping": 1.07, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.054764}
+{"trial": 23, "stiffness": 30.98, "damping": 2.6, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.043992}
+{"trial": 24, "stiffness": 44.31, "damping": 0.13, "ss_error": 0.4488162836432457, "ss_vel_j1": 0.9145455867052078, "ss_vel_j2": 1.733227231502533, "mean_error": 0.41818864510953424, "cost": 1.817654}
+{"trial": 25, "stiffness": 38.47, "damping": 1.17, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.044295}
+{"trial": 26, "stiffness": 32.83, "damping": 4.54, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.055522}
+{"trial": 27, "stiffness": 43.69, "damping": 2.32, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.055273}
+{"trial": 28, "stiffness": 23.15, "damping": 0.86, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.027435}
+{"trial": 29, "stiffness": 18.02, "damping": 8.81, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.062059}
+{"trial": 30, "stiffness": 39.11, "damping": 1.74, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.04779}
+{"trial": 31, "stiffness": 46.19, "damping": 0.53, "ss_error": 0.4499423737823963, "ss_vel_j1": 0.9388106647133827, "ss_vel_j2": 1.773322333097458, "mean_error": 0.4207733071297407, "cost": 1.854833}
+{"trial": 32, "stiffness": 46.22, "damping": 0.19, "ss_error": 0.44874221727252006, "ss_vel_j1": 0.916748893558979, "ss_vel_j2": 1.7365106570720672, "mean_error": 0.41713394282758237, "cost": 1.822533}
+{"trial": 33, "stiffness": 38.28, "damping": 1.27, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.044646}
+{"trial": 34, "stiffness": 34.52, "damping": 0.76, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.038307}
+{"trial": 35, "stiffness": 46.32, "damping": 1.47, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.053665}
+{"trial": 36, "stiffness": 49.97, "damping": 2.76, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.063781}
+{"trial": 37, "stiffness": 43.28, "damping": 0.13, "ss_error": 0.44890598878264426, "ss_vel_j1": 0.9178122708201408, "ss_vel_j2": 1.7368828016519546, "mean_error": 0.41906589609384537, "cost": 1.820186}
+{"trial": 38, "stiffness": 14.75, "damping": 6.3, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.046234}
+{"trial": 39, "stiffness": 36.35, "damping": 1.91, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.045912}
+{"trial": 40, "stiffness": 40.18, "damping": 0.69, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.043608}
+{"trial": 41, "stiffness": 44.74, "damping": 0.19, "ss_error": 0.44885418519377707, "ss_vel_j1": 0.923851498067379, "ss_vel_j2": 1.7473905396461487, "mean_error": 0.4196295936703682, "cost": 1.830159}
+{"trial": 42, "stiffness": 43.1, "damping": 0.14, "ss_error": 0.44892309963703153, "ss_vel_j1": 0.9139114013314247, "ss_vel_j2": 1.7271602362394334, "mean_error": 0.4131245086938143, "cost": 1.813261}
+{"trial": 43, "stiffness": 41.57, "damping": 0.84, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.045758}
+{"trial": 44, "stiffness": 47.2, "damping": 1.45, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.054437}
+{"trial": 45, "stiffness": 29.75, "damping": 1.95, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.039511}
+{"trial": 46, "stiffness": 6.99, "damping": 7.98, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.046889}
+{"trial": 47, "stiffness": 25.77, "damping": 0.58, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.028678}
+{"trial": 48, "stiffness": 42.62, "damping": 5.06, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.067947}
+{"trial": 49, "stiffness": 47.67, "damping": 2.31, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.059234}
+{"trial": 50, "stiffness": 12.19, "damping": 3.38, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.029075}
+{"trial": 51, "stiffness": 43.49, "damping": 0.31, "ss_error": 0.4491009232401848, "ss_vel_j1": 0.9280939108133316, "ss_vel_j2": 1.752796496152878, "mean_error": 0.41748926985263823, "cost": 1.834562}
+{"trial": 52, "stiffness": 45.19, "damping": 0.18, "ss_error": 0.44881295680999755, "ss_vel_j1": 0.9162446504831314, "ss_vel_j2": 1.7361406517028808, "mean_error": 0.416696464702487, "cost": 1.821094}
+{"trial": 53, "stiffness": 41.24, "damping": 1.12, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.04686}
+{"trial": 54, "stiffness": 36.66, "damping": 0.53, "ss_error": 0.4511523212492466, "ss_vel_j1": 0.9361102551221847, "ss_vel_j2": 1.7715910077095032, "mean_error": 0.42077276039123535, "cost": 1.844305}
+{"trial": 55, "stiffness": 39.52, "damping": 0.12, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.040139}
+{"trial": 56, "stiffness": 43.3, "damping": 0.95, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.048043}
+{"trial": 57, "stiffness": 33.75, "damping": 1.38, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.04065}
+{"trial": 58, "stiffness": 48.77, "damping": 0.58, "ss_error": 0.4503850983083248, "ss_vel_j1": 0.9401064965128899, "ss_vel_j2": 1.7739429891109466, "mean_error": 0.4216529434621334, "cost": 1.859103}
+{"trial": 59, "stiffness": 27.08, "damping": 0.1, "ss_error": 0.45102750122547147, "ss_vel_j1": 0.9058614355325699, "ss_vel_j2": 1.7186580872535706, "mean_error": 0.4196410844773054, "cost": 1.790873}
+{"trial": 60, "stiffness": 24.05, "damping": 1.81, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.033085}
+{"trial": 61, "stiffness": 21.91, "damping": 0.1, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.022418}
+{"trial": 62, "stiffness": 27.52, "damping": 0.95, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.032265}
+{"trial": 63, "stiffness": 20.09, "damping": 0.57, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.022958}
+{"trial": 64, "stiffness": 44.87, "damping": 0.52, "ss_error": 0.44996305242180823, "ss_vel_j1": 0.9388007333874703, "ss_vel_j2": 1.772044261097908, "mean_error": 0.42009834468364715, "cost": 1.852845}
+{"trial": 65, "stiffness": 31.13, "damping": 1.11, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.036661}
+{"trial": 66, "stiffness": 47.83, "damping": 0.41, "ss_error": 0.44882688239216806, "ss_vel_j1": 0.9330812963843346, "ss_vel_j2": 1.7628438764810561, "mean_error": 0.41796153558790683, "cost": 1.846645}
+{"trial": 67, "stiffness": 38.22, "damping": 9.97, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.088092}
+{"trial": 68, "stiffness": 35.49, "damping": 5.74, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.064196}
+{"trial": 69, "stiffness": 32.44, "damping": 0.78, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.036347}
+{"trial": 70, "stiffness": 42.44, "damping": 4.26, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.063753}
+{"trial": 71, "stiffness": 44.63, "damping": 0.11, "ss_error": 0.4487727363407612, "ss_vel_j1": 0.9124689948558807, "ss_vel_j2": 1.725594482421875, "mean_error": 0.4166640042513609, "cost": 1.812976}
+{"trial": 72, "stiffness": 45.87, "damping": 0.4, "ss_error": 0.44898333624005315, "ss_vel_j1": 0.932156330049038, "ss_vel_j2": 1.7618478947877885, "mean_error": 0.41727629616856576, "cost": 1.843844}
+{"trial": 73, "stiffness": 40.65, "damping": 0.11, "ss_error": 0.4491121001541615, "ss_vel_j1": 0.9089544102549553, "ss_vel_j2": 1.720486382842064, "mean_error": 0.4182004732340574, "cost": 1.805004}
+{"trial": 74, "stiffness": 27.23, "damping": 1.59, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.035188}
+{"trial": 75, "stiffness": 40.59, "damping": 1.25, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.046827}
+{"trial": 76, "stiffness": 44.29, "damping": 0.8, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.048295}
+{"trial": 77, "stiffness": 46.8, "damping": 0.39, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.048751}
+{"trial": 78, "stiffness": 38.41, "damping": 0.94, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.043137}
+{"trial": 79, "stiffness": 28.9, "damping": 1.25, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.035149}
+{"trial": 80, "stiffness": 49.95, "damping": 2.15, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.060698}
+{"trial": 81, "stiffness": 43.43, "damping": 0.1, "ss_error": 0.44884410724043844, "ss_vel_j1": 0.9054356080293655, "ss_vel_j2": 1.7119511425495149, "mean_error": 0.41144589814543725, "cost": 1.801484}
+{"trial": 82, "stiffness": 42.35, "damping": 0.1, "ss_error": 0.4489444452524185, "ss_vel_j1": 0.9144479671120643, "ss_vel_j2": 1.7299159109592437, "mean_error": 0.4188310514837503, "cost": 1.813976}
+{"trial": 83, "stiffness": 41.82, "damping": 0.37, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.043684}
+{"trial": 84, "stiffness": 41.4, "damping": 0.71, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.044949}
+{"trial": 85, "stiffness": 44.11, "damping": 0.13, "ss_error": 0.4488296470046043, "ss_vel_j1": 0.9157302710413933, "ss_vel_j2": 1.7345979166030885, "mean_error": 0.41845032626390455, "cost": 1.818741}
+{"trial": 86, "stiffness": 40.13, "damping": 0.75, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.043863}
+{"trial": 87, "stiffness": 24.48, "damping": 0.49, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.026928}
+{"trial": 88, "stiffness": 37.69, "damping": 0.1, "ss_error": 0.4494060270488262, "ss_vel_j1": 0.9121399742364883, "ss_vel_j2": 1.7252119916677475, "mean_error": 0.4165738767534494, "cost": 1.806277}
+{"trial": 89, "stiffness": 38.12, "damping": 1.04, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.04331}
+{"trial": 90, "stiffness": 37.41, "damping": 0.32, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.039031}
+{"trial": 91, "stiffness": 39.5, "damping": 0.11, "ss_error": 0.44922841623425486, "ss_vel_j1": 0.9108268329501152, "ss_vel_j2": 1.7225692307949065, "mean_error": 0.41624534122645857, "cost": 1.805966}
+{"trial": 92, "stiffness": 35.26, "damping": 0.39, "ss_error": 0.4501022778451443, "ss_vel_j1": 0.9342597481608391, "ss_vel_j2": 1.7664464724063873, "mean_error": 0.4198591672033071, "cost": 1.837672}
+{"trial": 93, "stiffness": 39.64, "damping": 0.63, "ss_error": 0.4522730150818825, "ss_vel_j1": 0.9395679154992104, "ss_vel_j2": 1.7784208732843398, "mean_error": 0.40900900621712205, "cost": 1.854065}
+{"trial": 94, "stiffness": 42.41, "damping": 0.12, "ss_error": 0.44896662309765817, "ss_vel_j1": 0.9133704692125321, "ss_vel_j2": 1.7315544241666794, "mean_error": 0.41823488907516004, "cost": 1.814456}
+{"trial": 95, "stiffness": 40.79, "damping": 0.11, "ss_error": 0.44910390362143515, "ss_vel_j1": 0.9099996596574783, "ss_vel_j2": 1.7211852031946182, "mean_error": 0.4163842102736235, "cost": 1.806045}
+{"trial": 96, "stiffness": 31.8, "damping": 0.83, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.035936}
+{"trial": 97, "stiffness": 36.88, "damping": 0.32, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.038458}
+{"trial": 98, "stiffness": 39.61, "damping": 7.54, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.077289}
+{"trial": 99, "stiffness": 40.79, "damping": 0.62, "ss_error": 10.0, "ss_vel_j1": 10.0, "ss_vel_j2": 10.0, "mean_error": 10.0, "cost": 20.043873}

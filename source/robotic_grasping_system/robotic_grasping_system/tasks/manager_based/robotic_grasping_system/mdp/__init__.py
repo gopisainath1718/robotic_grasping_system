@@ -11,3 +11,4 @@ from .events import *  # noqa: F401, F403
 from .observations import *  # noqa: F401, F403
 from .rewards import *  # noqa: F401, F403
 from .terminations import *  # noqa: F401, F403
+from .debug_vis import enable_debug_vis, disable_debug_vis, set_debug_vis_envs  # noqa: F401

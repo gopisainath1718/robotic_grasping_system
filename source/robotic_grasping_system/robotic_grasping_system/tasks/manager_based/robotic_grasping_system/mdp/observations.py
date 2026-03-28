@@ -47,6 +47,16 @@ def fingertip_to_object(
     return diff.reshape(env.num_envs, -1)
 
 
+def object_bbox_dims(env: ManagerBasedRLEnv) -> torch.Tensor:
+    """Returns per-env object bounding box dimensions (local space) as observation.
+
+    Returns: (num_envs, 3) — [x_size, y_size, z_size] in local object frame
+    """
+    if not hasattr(env, "object_bbox_dims"):
+        return torch.zeros(env.num_envs, 3, device=env.device)
+    return env.object_bbox_dims
+
+
 def object_encoding(
     env: ManagerBasedRLEnv,
     object_cfg: SceneEntityCfg,
