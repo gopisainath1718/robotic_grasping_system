@@ -4,7 +4,7 @@
 
 ### Reward Iterations
 
-**`object_vel` -> split into `object_lateral_vel` + `object_lift_vel`**:
+**`object_vel` split into `object_lateral_vel` + `object_lift_vel`**:
 The original `object_vel` penalty penalized all object motion equally, causing the agent to avoid the object entirely. Splitting it into lateral (penalized, -0.1) and vertical (rewarded when gated, +10.0) components solved this — the agent is discouraged from knocking but encouraged to lift.
 
 **`action_rate_l2` and `joint_vel_l2`** (tuned weights):
@@ -21,3 +21,6 @@ Intended to reward the hand approaching perpendicular to the object's long axis.
 
 **`grasp_reward`** (disabled — premature):
 A geometric grasp quality metric based on CrossDex (ICLR 2025): measures how well the object center lies between thumb and finger centroid. While mathematically sound, it introduced too many competing gradients when combined with the contact-based rewards. The simpler `fingertip_contact` + `finger_close` combination proved more trainable.
+
+**`mimic joints fine tuning`** (changed to regural position actuators):
+Tried tuning the mimic joints's natural frequency and damping ratio w.r.t the parent joints based on Nvidia documentation and it worked with single robot spawning in sim but failed when launched miltiple envs. Instead of wasting time in debuging, went ahead and changed those joints to poisition actuators. 
