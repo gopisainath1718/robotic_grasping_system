@@ -52,6 +52,8 @@ robotic_grasping_system/
 
 Training plots are located in [`docs/plots/`](docs/plots/). These plots are generated using tensorboard.
 
+Evaluation videos are located in [`docs/videos/`](docs/videos/).
+
 ---
 
 ## Future Work

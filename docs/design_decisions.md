@@ -78,9 +78,10 @@ Critic: [obs_dim] -> 512 -> 256 -> 128 -> [1 value]       (ELU activation)
 
 | Parameter | Value | Rationale |
 |---|---|---|
-| Learning rate | 1e-3 | Adaptive KL schedule adjusts this dynamically |
-| Clip param | 0.2 | Standard PPO clipping |
-| Entropy coef | 0.005 | Low — task has clear structure, don't over-explore |
-| GAE lambda | 0.95 | Standard bias-variance tradeoff |
-| Mini batches | 4 | With 4096 envs x 16 steps = 65536 samples per update |
-| Empirical normalization | True | Stabilizes training with diverse observation scales |
+| Learning rate | 1e-3 | Starts high, but the adaptive KL schedule dials it down when updates get too aggressive |
+| Clip param | 0.2 | Keeps policy ratio in [0.8, 1.2]. Dexterous manipulation policies collapse easily so this matters |
+| Entropy coef | 0.005 | Kept low — the task is structured enough that too much exploration breaks the contact-gated rewards |
+| Gamma | 0.99 | went with default value |
+| Num steps per env | 16 | Tested and increased from 8 — longer rollouts give the advantage estimator more context on the reach to contact to lift sequence |
+| Init noise std | 1.0 | Better to have initial exploration to stumble into useful contact configurations |
+| Empirical normalization | True | Joint positions range, velocities range and bbox dimsrange are different so normalizing is better |
