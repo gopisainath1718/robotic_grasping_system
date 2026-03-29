@@ -414,7 +414,6 @@ class RoboticGraspingSystemEnvCfg_PLAY(RoboticGraspingSystemEnvCfg):
 
         self.viewer.eye = (9.0, 0.0, 4.5)
 
-        # # --- Disable domain randomization ---
+        # --- Disable domain randomization ---
         self.events.reset_robot.params["position_range"] = (0.0, 0.0)
         self.events.reset_robot.params["velocity_range"] = (0.0, 0.0)
-        self.events.reset_objects.params["x_range"] = (-0.05, 0.05)

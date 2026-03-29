@@ -48,7 +48,7 @@ python scripts/rsl_rl/train.py --task Robotic-Grasping-System-v0
 
 # Evaluate a trained policy
 python scripts/rsl_rl/play.py --task Robotic-Grasping-System-Play-v0 \
-    --load_run <run_folder> --checkpoint <model.pt> --num_envs 
+    --load_run <run_folder> --checkpoint <model.pt>
 ```
 
-See [Usage](usage.md) for all training options, baselines, and Bayesian optimization.
+See [Usage](usage.md) for all training options and Bayesian optimization.
