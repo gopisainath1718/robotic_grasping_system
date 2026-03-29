@@ -57,7 +57,7 @@ Evaluation videos are located in [`docs/videos/`](docs/videos/).
 ---
 
 ## Future Work
-
+- The policy is still not perfect yet but needs little tuning for lifting the objects and it is just learning to lift. As of now it is able to grasp the things.
 - Fix and add approach_angle for better pre-grasp hand orientation
 - Depth-based object encoding replace bounding box with point cloud features
 - Curriculum learning for automatic difficulty scaling based on success rate (currently implemented only for rewards)
